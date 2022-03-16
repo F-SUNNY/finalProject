@@ -32,7 +32,13 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "form";
+		return "home";
+	}
+	
+	@RequestMapping("/home")
+	public String gohome() {
+		return "home";
+
 	}
 	
 }

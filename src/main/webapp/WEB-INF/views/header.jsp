@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default fixed-top border-bottom pt-3 bg-white">
 	<div class="container">
 		<div class="navbar-header">
-			<a href="/" class="navbar-brand">
+			<a href="home" class="navbar-brand">
 				<i class="menu-icon fa-solid fa-house"></i>
 			</a>
 		</div>

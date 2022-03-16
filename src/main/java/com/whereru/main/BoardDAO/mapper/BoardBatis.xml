@@ -16,7 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM testboard4
 	</select>
 	
-	<select id="images" parameterType="String" resultType="String">
-		SELECT filenames FROM testboard4 where boardNum= #{boardNum} 
+	<select id="getlist" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+		SELECT * FROM testboard4 where boardNum= #{boardNum} 
 	</select>
+	
 </mapper>

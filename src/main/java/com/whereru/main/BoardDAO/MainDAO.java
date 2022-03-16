@@ -19,19 +19,20 @@ public class MainDAO implements InterfaceBoardDAO{
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ArrayList<MainDTO> list() {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		ArrayList<MainDTO> list =  (ArrayList)sqlSession.selectList("list");
 		
 		return list;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public String images(String boardNum) {
-		String images = sqlSession.selectOne("images",boardNum);
+	public ArrayList<MainDTO> getlist(String boardNum) {
+		ArrayList<MainDTO> dto = (ArrayList)sqlSession.selectList("getlist",boardNum);
 		
-		return images;
+		return dto;
 	}
 	
 	
