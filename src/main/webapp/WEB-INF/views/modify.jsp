@@ -31,36 +31,38 @@
 <body>
 <%@ include file="header.jsp" %>
  <br/><br/>
+ <c:forEach items="${list}" var="list" >
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
-	<form action="uploadMulti" method="post" enctype="multipart/form-data">
+	<form action="modifyExcute.do?boardNum=${list.boardNum}" method="post" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="nickname">NICKNAME</label>
-			<input name="nickname" type="text" class="nickname form-control" placeholder="nickname">
+			<input name="nickname" type="text" class="nickname form-control" placeholder="${list.nickname}" value="${list.nickname}">
 		</div>
 		<div class="form-group">
 			<label for="title">TITLE</label>
-			<input name="title" type="text" class="title form-control" placeholder="title">
+			<input name="title" type="text" class="title form-control" placeholder="${list.title}" value="${list.title}">
 		</div>
 		<div class="form-group">
 			<label for="content">CONTENT</label>
-			<input name="content" type="text" class="content form-control" placeholder="content">
+			<input name="content" type="text" class="content form-control" placeholder="${list.content}" value="${list.content}">
 		</div>
-		<input name="location" type="hidden" class="location" placeholder="location">
+		<input name="location" type="hidden" class="location" placeholder="location" value="${list.location}">
 		<div class="input-group mb-3">
 			<div class="custom-file">
-				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple">
+				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple" required>
 				<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="email">Address</label>
-		<input type="text" id="sample5_address" class="form-control" placeholder="Address" readonly>
+		<input type="text" id="sample5_address" class="form-control" placeholder="${list.location}" readonly>
 		</div>
 		<input type="button" class="btn btn-outline-primary  btn-block"  onclick="sample5_execDaumPostcode()" value="Search my location"/><br>
 		<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div><br/>
         <input type="submit" class="btn btn-outline-success" value="J O I N"/><hr/>
 	</form>
 </section>
+</c:forEach>
 <%@ include file="footer.jsp" %>
 
 

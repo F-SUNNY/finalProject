@@ -8,13 +8,26 @@ public class MainDTO {
 	private String location;
 	private String titleImg;
 	private String filenames;
+	
 	public MainDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
+	
 	public MainDTO(String nickname, String title, String content, String location, String titleImg,
 			String filenames) {
 		super();
+		this.nickname = nickname;
+		this.title = title;
+		this.content = content;
+		this.location = location;
+		this.titleImg = titleImg;
+		this.filenames = filenames;
+	}
+	
+	public MainDTO(String boardNum,String nickname, String title, String content, String location, String titleImg,
+			String filenames) {
+		super();
+		this.boardNum = boardNum;
 		this.nickname = nickname;
 		this.title = title;
 		this.content = content;

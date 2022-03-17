@@ -34,7 +34,25 @@ public class MainDAO implements InterfaceBoardDAO{
 		
 		return dto;
 	}
+
+	@Override
+	public void deleteBoard(String boardNum) {
+		sqlSession.delete("deleteBoard", boardNum);
+	}
 	
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public ArrayList<MainDTO> modifyList(String boardNum) {
+		ArrayList<MainDTO> list =  (ArrayList)sqlSession.selectList("modifyList",boardNum);
+		
+		return list;
+	}
+
+	@Override
+	public void modifyExcute(MainDTO dto) {
+		sqlSession.update("modifyExcute", dto);
+	}
+
 	
 }

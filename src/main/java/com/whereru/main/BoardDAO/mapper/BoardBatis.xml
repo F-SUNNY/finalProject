@@ -17,7 +17,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getlist" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-		SELECT * FROM testboard4 where boardNum= #{boardNum} 
+		SELECT * FROM testboard4 where boardNum= #{boardNum} ORDER BY BOARDNUM 
 	</select>
+	
+	<select id="deleteBoard" parameterType="String" >
+		DELETE FROM testboard4 WHERE boardNum = #{boardNum}
+	</select>
+
+	<select id="modifyList" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+		SELECT * FROM testboard4 where boardNum= #{boardNum}
+	</select>
+	
+	<update id="modifyExcute" parameterType="String" >
+	UPDATE testboard4 SET nickname = #{nickname},title = #{title},content = #{content}, location = #{location}, titleImg = #{titleImg}, filenames = #{filenames} WHERE boardnum = #{boardNum}
+	
+	</update>
 	
 </mapper>

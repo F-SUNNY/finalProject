@@ -37,7 +37,7 @@
 						<img class="titleimg" width="280px" src="images/${list.titleImg}" data-value="${list.boardNum}" data-toggle="modal" data-target="#modal-reg">
 					</div>
 					<div class="post-bottom border">
-						<h4>${list.content}</h4>
+						<h4>${list.location}</h4>
 					</div>
 				</div>
 			</c:forEach>
@@ -68,6 +68,11 @@
                     </div>
                 </div>
             </div>
+            <!-- Modal footer -->
+        	<div class="modal-footer">
+        		<a class="btn btn-outline-success modify" href="#" role="button">Modify</a>
+                <a class="btn btn-outline-danger delete" href="#" role="button" onclick="deleteCheck()">Delete</a>
+        	</div>
         </div>
     </div>
 </div>
@@ -95,6 +100,7 @@ $(document).ready(function() {
             	let location = data[0].location;
             	let titleImg = data[0].titleImg;
             	let filenames = data[0].filenames.split('/');
+            	let boardNum = data[0].boardNum;
             	
             	for(var i=0; i<filenames.length-1; i++){
                     if(i==0){
@@ -107,14 +113,28 @@ $(document).ready(function() {
                 }
                 $(".Cslide").html(Cslide);
                 $(".Citem").html(Citem);
-            		
+               
+                $(".modify").alert('rreturn?');
+                $(".modify").attr('href','modify?boardNum='+boardNum);
+                $(".delete").attr('href','delete.do?boardNum='+boardNum);
             },
             error:function(data){
                 console.log("ajax 처리 실패");
             }
         });
     });
+    
+    
 });
+
+function deleteCheck(){
+    if(confirm("삭제하시겠습니까?")){
+        return true;
+    } else {
+    	$(".delete").attr('href','list');
+        return false;
+    }
+}
 </script>
 </body>
 </html>
