@@ -13,6 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
 <script src="https://kit.fontawesome.com/b4e02812b5.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -89,6 +90,11 @@ $(document).ready(function() {
             url:"getlist.do",
             data:{boardNum:boardNum},
             type:"post",
+ 		    beforeSend: function(xhr){
+	 		   	var token = $("meta[name='_csrf']").attr('content');
+	 			var header = $("meta[name='_csrf_header']").attr('content');
+ 		        xhr.setRequestHeader(header, token);
+ 		    },
             success:function(data){
             	
 	           	var Cslide = "";

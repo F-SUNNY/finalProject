@@ -32,23 +32,24 @@
 <%@ include file="header.jsp" %>
  <br/><br/>
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
-	<form action="uploadMulti" method="post" enctype="multipart/form-data">
+	<form action="uploadMulti?${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 		<div class="form-group">
 			<label for="nickname">NICKNAME</label>
-			<input name="nickname" type="text" class="nickname form-control" placeholder="nickname">
+			<input name="nickname" type="text" class="nickname form-control" placeholder="nickname" required>
 		</div>
 		<div class="form-group">
 			<label for="title">TITLE</label>
-			<input name="title" type="text" class="title form-control" placeholder="title">
+			<input name="title" type="text" class="title form-control" placeholder="title" required>
 		</div>
 		<div class="form-group">
 			<label for="content">CONTENT</label>
-			<input name="content" type="text" class="content form-control" placeholder="content">
+			<input name="content" type="text" class="content form-control" placeholder="content" required>
 		</div>
-		<input name="location" type="hidden" class="location" placeholder="location">
+		<input name="location" type="hidden" class="location" placeholder="location" required>
 		<div class="input-group mb-3">
 			<div class="custom-file">
-				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple">
+				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple" required>
 				<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 			</div>
 		</div>
@@ -58,7 +59,7 @@
 		</div>
 		<input type="button" class="btn btn-outline-primary  btn-block"  onclick="sample5_execDaumPostcode()" value="Search my location"/><br>
 		<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div><br/>
-        <input type="submit" class="btn btn-outline-success" value="J O I N"/><hr/>
+        <input type="submit" class="btn btn-outline-success" onclick="locationNullCheck()" value="J O I N"/><hr/>
 	</form>
 </section>
 <%@ include file="footer.jsp" %>
@@ -115,6 +116,13 @@ new daum.Postcode({
 	left : 500,
 	top : 300	
 });
+}
+
+function locationNullCheck(e) {
+    if ($('.location').val() == "") {
+        alert("지역은 필수입니다!");
+        e.preventDefault();
+    }
 }
 </script>
 </body>

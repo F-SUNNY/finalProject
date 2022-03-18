@@ -6,7 +6,9 @@
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>/WEB-INF/spring/root-context.xml
+					/WEB-INF/spring/security-context.xml
+		</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
@@ -51,7 +53,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- auto http to https 
+	<!-- auto http to https--> 
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>SSL Forward</web-resource-name>
@@ -63,22 +65,21 @@
 		</user-data-constraint>
 	</security-constraint>
 	
-	 Security filter 추가 
+	 <!-- Security filter 추가 -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
-	-->
+	
 	<!-- security filter mapping -->
-	<!-- project의 모든 요청과 응답 경로에 적용 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>  
-	</filter-mapping>-->
+		<url-pattern>/*</url-pattern>  <!-- project의 모든 요청과 응답 경로에 적용 -->
+	</filter-mapping>
 	
 	<!-- Ajax Access-Control-Allow-Origin Apache Tomcat  문제 해결 방법 -->
 	<!-- cors를 처리하는 필터로 cors란 다른 서버에 있는 자원을 ajax에서 공유시 원래는 안되는데
-	     이를 해소 시키주는 역활을 하는 필터 
+	     이를 해소 시키주는 역활을 하는 필터 -->
 	<filter>
 		<filter-name>CorsFilter</filter-name>
 		<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -86,6 +87,6 @@
 	<filter-mapping>
 		<filter-name>CorsFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>-->
+	</filter-mapping>
 
 </web-app>

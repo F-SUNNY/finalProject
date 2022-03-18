@@ -33,20 +33,21 @@
  <br/><br/>
  <c:forEach items="${list}" var="list" >
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
-	<form action="modifyExcute.do?boardNum=${list.boardNum}" method="post" enctype="multipart/form-data">
+	<form action="modifyExcute.do?boardNum=${list.boardNum}&${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 		<div class="form-group">
 			<label for="nickname">NICKNAME</label>
-			<input name="nickname" type="text" class="nickname form-control" placeholder="${list.nickname}" value="${list.nickname}">
+			<input name="nickname" type="text" class="nickname form-control" placeholder="${list.nickname}" value="${list.nickname}" required>
 		</div>
 		<div class="form-group">
 			<label for="title">TITLE</label>
-			<input name="title" type="text" class="title form-control" placeholder="${list.title}" value="${list.title}">
+			<input name="title" type="text" class="title form-control" placeholder="${list.title}" value="${list.title}" required>
 		</div>
 		<div class="form-group">
 			<label for="content">CONTENT</label>
-			<input name="content" type="text" class="content form-control" placeholder="${list.content}" value="${list.content}">
+			<input name="content" type="text" class="content form-control" placeholder="${list.content}" value="${list.content}" required>
 		</div>
-		<input name="location" type="hidden" class="location" placeholder="location" value="${list.location}">
+		<input name="location" type="hidden" class="location" placeholder="location" value="${list.location}" required>
 		<div class="input-group mb-3">
 			<div class="custom-file">
 				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple" required>

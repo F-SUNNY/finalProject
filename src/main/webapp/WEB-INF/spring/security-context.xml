@@ -11,20 +11,9 @@
 	<!-- beans:beans = security 설정 엘리먼트 태그 -->
 	
 	<!-- security 인증에 대한 process를 정의해 둔 custom-class bean 설정 -->
-	
-	
-	
-	
-	
-	<!-- id / password를 인증 처리하는 클래스 객체
-	<beans:bean id="customUserDetailService" class="com.whereRU.main.security.CustomUserDetailsService" />
- 	-->
- 	
- 	
- 	
- 	
- 	
- 	
+	<!-- id / password를 인증 처리하는 클래스 객체 -->
+	<beans:bean id="customUserDetailService" class="com.whereru.main.security.CustomUserDetailsService" />
+
 	<!-- password를 암호화하는 클래스 객체 -->
 	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	
@@ -46,18 +35,6 @@
 		
 		<!-- permitAll : 모두에게 허용 -->
 		<intercept-url pattern="/" access="permitAll" />
-		<intercept-url pattern="/images/**" access="permitAll" />
-		<intercept-url pattern="/processLogin" access="permitAll" />
-		<intercept-url pattern="/home" access="permitAll" />
-		
-		<!-- isAnonymous() : 로그인하지 않은 user -->
-		<intercept-url pattern="/login_view" access="isAnonymous()" />
-		<intercept-url pattern="/join_view" access="isAnonymous()" />
-		<intercept-url pattern="/login" access="isAnonymous()" />
-		<intercept-url pattern="/join" access="isAnonymous()" />
-	
-		<!-- hasRole('ROLE_##') : 로그인한 회원 중 'ROLE_##' 권한을 가진 user / requires-channel="" : url에 지정한 값이 포함되어 있어야만 접근 -->
-		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" requires-channel="https" />
 		
 		<!-- form으로 submit하여 login 관련 설정
 			 login-page = 로그인 form이 있는 페이지 지정 
