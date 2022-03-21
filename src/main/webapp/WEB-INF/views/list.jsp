@@ -22,7 +22,8 @@
 <link rel="stylesheet" type="text/css" href="css/header.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="css/footer.css" />
-<link rel="stylesheet" type="text/css" href="search/css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/search/main.css" />
+<link rel="stylesheet" type="text/css" href="css/search/modalPost.css" />
 <title>List</title>
 </head>
 <body>
@@ -36,8 +37,8 @@
 					<div class="post-top border rounded">
 						<img class="titleimg" width="280px" src="images/${list.titleImg}" data-value="${list.boardNum}" data-toggle="modal" data-target="#modal-reg">
 					</div>
-					<div class="post-bottom border">
-						<h4>${list.location}</h4>
+					<div class="post-bottom border text-center">
+						<h5>${list.location}</h4>
 					</div>
 				</div>
 			</c:forEach>
@@ -49,25 +50,32 @@
 <div class="modal fade" id="modal-reg">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-body d-flex">
-                <div class="test" style="width: 50%;">
-                    <div id="demo" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ul class="carousel-indicators Cslide">
-                        </ul>
-                        <!-- The slideshow -->
-                        <div class="carousel-inner Citem">
+            <div class="modal-body bg-light d-flex justify-content-between">
+                    <div class="post-img border rounded mr-2"><i class="modal-icon fa-regular fa-images" /></i>
+                        <div id="demo" class="carousel slide" data-ride="carousel">
+                            <!-- The slideshow -->
+                            <div class="carousel-inner Citem">
+                            </div>
+                            <!-- Left and right controls -->
+                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#demo" data-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </a>
                         </div>
-                        <!-- Left and right controls -->
-                        <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </a>
-                        <a class="carousel-control-next" href="#demo" data-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </a>
                     </div>
+                    <ul class="list-group d-block">
+                        <li class="list-group-item mb-1"><i class="modal-icon fa-regular fa-circle-user"></i></li>
+                        <li class="list-group-item mb-1"><i class="modal-icon fa-regular fa-rectangle-list"></i></li>
+                        <li class="list-group-item mb-1 d-flex row mx-0">
+                            <div class="col-6"><i class="modal-icon fa-regular fa-heart"></i></div>
+                            <div class="col-3"><i class="modal-icon fa-regular fa-bookmark"></i></div>
+                            <div class="col-3"><i class="modal-icon fa-regular fa-comment-dots"></i></div>
+                        </li>
+                        <li class="list-group-item"><i class="modal-icon fa-regular fa-comment-dots"></i></li>
+                    </ul>
                 </div>
-            </div>
             <!-- Modal footer -->
         	<div class="modal-footer">
         		<a class="btn btn-outline-success modify" href="#" role="button">Modify</a>
@@ -109,14 +117,12 @@ $(document).ready(function() {
             	
             	for(var i=0; i<filenames.length-1; i++){
                     if(i==0){
-                       Cslide+='<li data-target="#demo" data-slide-to="'+i+'" class="active"></li>';
-                       Citem+='<div class="carousel-item active"><img src="images/'+filenames[i]+'" width="600px" height="600px"></div>';
+                       Citem+='<div class="carousel-item active"><img src="images/'+filenames[i]+'"></div>';
                     }else{
-                       Cslide+='<li data-target="#demo" data-slide-to="'+i+'"></li>';
-                       Citem+='<div class="carousel-item"><img src="images/'+filenames[i]+'" width="600px" height="600px"></div>';
+                       Citem+='<div class="carousel-item"><img src="images/'+filenames[i]+'"></div>';
                     }
                 }
-                $(".Cslide").html(Cslide);
+               
                 $(".Citem").html(Citem);
                
                 $(".modify").alert('rreturn?');
