@@ -32,7 +32,7 @@
 <%@ include file="header.jsp" %>
  <br/><br/>
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
-	<form action="uploadMulti?${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
+	<form id="addForm" action="uploadMulti?${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 		<div class="form-group">
 			<label for="nickname">NICKNAME</label>
@@ -59,13 +59,23 @@
 		</div>
 		<input type="button" class="btn btn-outline-primary  btn-block"  onclick="sample5_execDaumPostcode()" value="Search my location"/><br>
 		<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div><br/>
-        <input type="submit" class="btn btn-outline-success" onclick="locationNullCheck()" value="J O I N"/><hr/>
+        <input type="button" class="btn btn-outline-success" onclick="checkfrm()" value="등록"/><hr/>
 	</form>
 </section>
 <%@ include file="footer.jsp" %>
 
 
 <script type="text/javascript">
+
+
+function checkfrm() { //ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+	if($('.location').val()==""){
+		alert('장소는 필수입력입니다 ㅜㅜ');
+		return false;
+	}else{
+	$('#addForm').submit();
+	}
+}
     
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 mapOption = {
@@ -118,12 +128,6 @@ new daum.Postcode({
 });
 }
 
-function locationNullCheck(e) {
-    if ($('.location').val() == "") {
-        alert("지역은 필수입니다!");
-        e.preventDefault();
-    }
-}
 </script>
 </body>
 </html>

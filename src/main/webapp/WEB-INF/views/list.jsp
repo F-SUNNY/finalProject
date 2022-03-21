@@ -22,14 +22,13 @@
 <link rel="stylesheet" type="text/css" href="css/header.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="css/footer.css" />
+<link rel="stylesheet" type="text/css" href="search/css/main.css" />
 <title>List</title>
 </head>
 <body>
 <%@ include file="header.jsp" %>
 
 <section class="container mb-4">
-	<input type="hidden" id="modalBtn" data-toggle="modal" data-target="#modal-reg" value="modal" />
-
 	<div class="result_posts">
 		<div class="posts d-flex flex-wrap justify-content-start mt-2">
 			<c:forEach items="${list}" var="list" >
@@ -129,8 +128,6 @@ $(document).ready(function() {
             }
         });
     });
-    
-    
 });
 
 function deleteCheck(){

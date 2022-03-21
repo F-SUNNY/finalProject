@@ -60,7 +60,7 @@
 		</div>
 		<input type="button" class="btn btn-outline-primary  btn-block"  onclick="sample5_execDaumPostcode()" value="Search my location"/><br>
 		<div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div><br/>
-        <input type="submit" class="btn btn-outline-success" value="J O I N"/><hr/>
+        <input type="submit" id="sub" class="btn btn-outline-success" value="J O I N"/><hr/>
 	</form>
 </section>
 </c:forEach>
@@ -68,7 +68,6 @@
 
 
 <script type="text/javascript">
-    
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 mapOption = {
     center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
