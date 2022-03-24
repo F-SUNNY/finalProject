@@ -18,9 +18,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- KAKAO API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=94ef81dc370b9f961476a1859364f709&libraries=services"></script>
+
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="css/header.css" />
 <link rel="stylesheet" type="text/css" href="css/main.css" />
@@ -240,7 +242,7 @@ function sample5_execDaumPostcode() {
 new daum.Postcode({
     oncomplete: function(data) {
         var addr = data.address; // 최종 주소 변수
-        $('.location').val(data.sido+" "+data.sigungu);
+        $('.location').val(data.address);
         // 주소 정보를 해당 필드에 넣는다.
         document.getElementById("sample5_address").value = addr;
         // 주소로 상세 정보를 검색

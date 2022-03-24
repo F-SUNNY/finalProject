@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.whereru.main.BoardDTO.CommentsDTO;
 import com.whereru.main.BoardDTO.MainDTO;
 
 public class MainDAO implements InterfaceBoardDAO{
@@ -29,22 +30,22 @@ public class MainDAO implements InterfaceBoardDAO{
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ArrayList<MainDTO> getlist(String boardNum) {
-		ArrayList<MainDTO> dto = (ArrayList)sqlSession.selectList("getlist",boardNum);
+	public ArrayList<MainDTO> getlist(String postNo) {
+		ArrayList<MainDTO> dto = (ArrayList)sqlSession.selectList("getlist",postNo);
 		
 		return dto;
 	}
 
 	@Override
-	public void deleteBoard(String boardNum) {
-		sqlSession.delete("deleteBoard", boardNum);
+	public void deleteBoard(String postNo) {
+		sqlSession.delete("deleteBoard", postNo);
 	}
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ArrayList<MainDTO> modifyList(String boardNum) {
-		ArrayList<MainDTO> list =  (ArrayList)sqlSession.selectList("modifyList",boardNum);
+	public ArrayList<MainDTO> modifyList(String postNo) {
+		ArrayList<MainDTO> list =  (ArrayList)sqlSession.selectList("modifyList",postNo);
 		
 		return list;
 	}
@@ -52,6 +53,40 @@ public class MainDAO implements InterfaceBoardDAO{
 	@Override
 	public void modifyExcute(MainDTO dto) {
 		sqlSession.update("modifyExcute", dto);
+	}
+
+	@Override
+	public void addcomments(CommentsDTO dto) {
+		sqlSession.insert("addcomments", dto);
+	}
+
+	@Override
+	public ArrayList<CommentsDTO> getcomments(String postNo) {
+		ArrayList<CommentsDTO> dto =(ArrayList)sqlSession.selectList("getcomments",postNo);
+		
+		return dto;
+	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public ArrayList<MainDTO> search(String keyword, String searchVal) {
+		ArrayList<MainDTO> dto = new ArrayList<MainDTO>();
+		System.out.println( "keyword ="+  keyword);
+		System.out.println("searchVal = "+searchVal);
+		if(searchVal.equals("title")) {
+			dto = (ArrayList)sqlSession.selectList("searchTitle", keyword);
+			System.out.println("타이틀 실행");
+			return dto;
+		}else if(searchVal.equals("content")) {
+			dto = (ArrayList)sqlSession.selectList("searchContent", keyword);
+			System.out.println("컨텐츠 실행");
+			return dto;
+		}else {
+			dto = (ArrayList)sqlSession.selectList("searchWriter", keyword);			
+			System.out.println("작성자 실행");
+			return dto;
+		}
+		
+		
 	}
 
 	
