@@ -59,6 +59,13 @@ public class MainDAO implements InterfaceBoardDAO{
 	public void addcomments(CommentsDTO dto) {
 		sqlSession.insert("addcomments", dto);
 	}
+	
+	
+	@Override
+	public void addReplyComments(CommentsDTO dto) {
+		sqlSession.update("beforeAddReply", dto);
+		sqlSession.insert("addReplyComments", dto);
+	}
 
 	@Override
 	public ArrayList<CommentsDTO> getcomments(String postNo) {

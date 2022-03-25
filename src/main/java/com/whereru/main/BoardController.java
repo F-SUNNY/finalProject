@@ -111,6 +111,8 @@ public class BoardController {
 		String images = "";
 		String titleImage="";
 		String tmp="";
+
+		
 		List<MultipartFile> fileList = multi.getFiles("img");
 		
 		//집에서 작업할시
@@ -141,9 +143,19 @@ public class BoardController {
 	
 	@ResponseBody
 	@RequestMapping("/addcomments.do")
-	public void addcomments(@RequestParam("postNo") String postNo, @RequestParam("content") String content){
-		CommentsDTO dto = new CommentsDTO(postNo,content);
+	public void addcomments(@RequestParam("postNo") String postNo, @RequestParam("content") String content,@RequestParam("grpl") String grpl){
+		int Igrpl = Integer.parseInt(grpl);
+		CommentsDTO dto = new CommentsDTO(postNo,content,Igrpl);
 		dao.addcomments(dto);
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("/addReplyComments.do")
+	public void addReplyComments(@RequestParam("postNo") String postNo,@RequestParam("grp") String grp, @RequestParam("content") String content){
+		int Igrp = Integer.parseInt(grp);
+		CommentsDTO dto = new CommentsDTO(postNo,Igrp,content);
+		dao.addReplyComments(dto);
 		
 	}
 	

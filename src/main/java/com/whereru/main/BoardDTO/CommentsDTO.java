@@ -35,10 +35,18 @@ public class CommentsDTO {
 	}
 
 
-	public CommentsDTO(String postNo, String content) {
+	public CommentsDTO(String postNo, int grp, String content) {
 		super();
 		this.postNo = postNo;
 		this.content = content;
+		this.grp = grp;
+	}
+
+	public CommentsDTO(String postNo, String content,int grpl) {
+		super();
+		this.postNo = postNo;
+		this.content = content;
+		this.grpl = grpl;
 	}
 	public int getReply() {
 		return reply;

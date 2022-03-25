@@ -34,12 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="addcomments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
 		<![CDATA[INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps)
-		 VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},(SELECT NVL(max(grp),0)+1 FROM COMMENTS),0,COMMENTS_SEQ.currval)
+		 VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},COMMENTS_SEQ.CURRVAL,#{grpl},NVL((SELECT MAX(grps) FROM COMMENTS),0)+1)
 		 ]]>
 	</insert>
 	
 	<select id="getcomments" parameterType="String" resultType="com.whereru.main.BoardDTO.CommentsDTO">
-		SELECT * FROM COMMENTS where POSTNO= #{postNo}
+		SELECT * FROM COMMENTS where POSTNO= #{postNo} ORDER BY grps ASC
 	</select>
 	
 	<select id="searchTitle" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
@@ -60,5 +60,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	</select>
 	
+	<update id="beforeAddReply" parameterType="com.whereru.main.BoardDTO.CommentsDTO" >
+		<![CDATA[
+			UPDATE (SELECT * FROM COMMENTS WHERE grps > NVL((SELECT MAX(grps) FROM COMMENTS 
+			WHERE grp=#{grp}),(SELECT GRPS FROM COMMENTS WHERE COMMENTNO=#{grp}))) 
+			SET grps = grps+1
+		 ]]>
+	</update>
 	
+	<insert id="addReplyComments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
+		<![CDATA[
+		INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps) 
+		VALUES (COMMENTS_SEQ.nextval,
+				#{postNo},
+				#{content},
+				#{grp},
+				NVL( (SELECT grpl FROM COMMENTS WHERE COMMENTNO=#{grp}) , 0 ) + 1,
+				NVL( (SELECT MAX(grps) FROM COMMENTS WHERE grp =#{grp}) , (SELECT grps FROM COMMENTS WHERE COMMENTNO=#{grp}) ) + 1)
+		 ]]>
+	</insert>
 </mapper>

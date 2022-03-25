@@ -50,7 +50,7 @@
 		<input name="location" type="hidden" class="location" placeholder="location" value="${list.location}" required>
 		<div class="input-group mb-3">
 			<div class="custom-file">
-				<input name="img" type="file" class="img custom-file-input" placeholder="img" id="inputGroupFile01" multiple="multiple" required>
+				<input name="img" type="file" class="img custom-file-input"  placeholder="img" id="inputGroupFile01" multiple="multiple">
 				<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 			</div>
 		</div>

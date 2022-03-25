@@ -95,7 +95,7 @@ ul{
                         </li>
                         <li>
                         <div class="row">
-                        <input type="text" class="col-sm-10 comment">
+                        <input type="text" class="col-sm-10 comment grpl" data-value="0">
                         <button type="button" class="btn btn-outline-success addcomment" role="button">전송</button>
                         </div>
                         </li>
@@ -172,15 +172,19 @@ $(document).ready(function() {
         
     });
 
+	
 	$('.addcomment').click(function () {
 		
 		let content = $('.comment').val();
+		let grpl = $('.grpl').attr('data-value');
+		console.log(grpl);
 		
 		$.ajax({
 			url : 'addcomments.do',
 			type : 'post',
 			data : {postNo : postNo,
-					content : content},
+					content : content,
+					grpl : grpl},
 			beforeSend: function(xhr){
 		 	  	var token = $("meta[name='_csrf']").attr('content');
 		 		var header = $("meta[name='_csrf_header']").attr('content');
@@ -197,31 +201,82 @@ $(document).ready(function() {
 		});
 	});
 
-function getComments() {
-	let comments ="";
-	$.ajax({
-         url:"getcomments.do",
-         data:{postNo:postNo},
-         type:"post",
-		    beforeSend: function(xhr){
-	 		   	var token = $("meta[name='_csrf']").attr('content');
-	 			var header = $("meta[name='_csrf_header']").attr('content');
-		        xhr.setRequestHeader(header, token);
-		    },
-         success:function(data){
-	           	console.log(data);
-	           	for(var i=0; i<data.length; i++){
-					comments += '<span>'+data[i].content+'</span><br/>';
+	
+	
+	function getComments() {
+		let comments ="";
+		$.ajax({
+	         url:"getcomments.do",
+	         data:{postNo:postNo},
+	         type:"post",
+			    beforeSend: function(xhr){
+		 		   	var token = $("meta[name='_csrf']").attr('content');
+		 			var header = $("meta[name='_csrf_header']").attr('content');
+			        xhr.setRequestHeader(header, token);
+			    },
+	         success:function(data){
+	        	 console.log(data);
+		           	for(var i=0; i<data.length; i++){
+		           		comments += '<div>';
+						for(var y=0; y<data[i].grpl; y++){
+		           		comments += '&nbsp;&nbsp;';
+						}
+		           		comments += '<span>'+data[i].content+'</span>&nbsp;&nbsp;&nbsp;';
+						comments += '<span class ="replyClick" style="font-size:5px;">답글달기</span><br/>';
+						comments += '<div class="row">';
 
-	           	}
-				$('.comments').html(comments);
-         },
-         error:function(data){
-             console.log("ajax 처리 실패");
-         }
-     });
-}
+						comments += '<input type="hidden" class="col-xs-10 replyComment" data-value="'+data[i].grp+'">'
+						comments += '<input type="hidden" class="btn btn-outline-success addreplyComment" role="button" value="전송"></input>'
 
+						comments += '</div>'
+						comments += '</div>';
+		           	}
+		           	
+					$('.comments').html(comments);
+					$('.replyClick').click(function () {
+						$(this).siblings('.row').children('.replyComment').attr('type','text');
+						$(this).siblings('.row').children('.addreplyComment').attr('type','button');
+						
+						
+						$('.addreplyComment').click(function () {
+						let content = $(this).siblings('.replyComment').val();
+						let grp = $(this).siblings('.replyComment').attr('data-value');
+						console.log('content = '+content);
+						console.log('grp = '+grp);
+
+							$.ajax({
+								url : 'addReplyComments.do',
+								type : 'post',
+								data : {postNo : postNo,
+										content : content,
+										grp : grp},
+								beforeSend: function(xhr){
+							 	  	var token = $("meta[name='_csrf']").attr('content');
+							 		var header = $("meta[name='_csrf_header']").attr('content');
+						 		    xhr.setRequestHeader(header, token);
+						 		},
+						 		success : function (data) {
+						 			console.log('success');
+						 			getComments();
+								},
+								error : function (data) {
+									console.log('ERROR');
+								}
+								
+							});
+						});
+						
+					});
+	         },
+	         error:function(data){
+	             console.log("ajax 처리 실패");
+	         }
+	     });
+	}
+	
+	
+	
+	
 });
 
 
