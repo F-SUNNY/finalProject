@@ -2,81 +2,106 @@
 <!-- mapper 문서 형식 지정 -->
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- root element는 mapper -->
 <!-- 속성 namespace는 인터페이스의 경로 및 인터페이스명 -->
-<mapper namespace = "com.whereru.main.BoardDAO.InterfaceBoardDAO">	   
+<mapper namespace = "com.whereru.main.BoardDAO.InterfaceBoardDAO">      
 
-	<insert id="write" parameterType="String">
-		Insert into POST(POSTNO,EMAIL,TITLE,CONTENT,LOCATION,TITLEIMAGE,IMAGES)
-		 values (POST_NO_SEQ.NEXTVAL,#{email},#{title},#{content},#{location},#{titleImage},#{images})
-	</insert>
-	
-	<select id="list" resultType="com.whereru.main.BoardDTO.MainDTO" >
-		SELECT * FROM POST ORDER BY POSTNO DESC
-	</select>
-	
-	<select id="getlist" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-		SELECT * FROM POST where POSTNO= #{postNo} ORDER BY POSTNO 
-	</select>
-	
-	<select id="deleteBoard" parameterType="String" >
-		DELETE FROM POST WHERE POSTNO = #{postNo}
-	</select>
+   <insert id="write" parameterType="String">
+      Insert into POST(POSTNO,CONTENT,HASHTAG,LOCATION,TITLEIMAGE,IMAGES)
+       values (POST_NO_SEQ.NEXTVAL,#{content},#{hashtag},#{location},#{titleImage},#{images})
+   </insert>
+   
+   <select id="list" resultType="com.whereru.main.BoardDTO.MainDTO" >
+      SELECT * FROM POST ORDER BY POSTNO DESC
+   </select>
+   
+   <select id="getlist" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      SELECT * FROM POST where POSTNO= #{postNo} ORDER BY POSTNO 
+   </select>
+   
+   <select id="deleteBoard" parameterType="String" >
+      DELETE FROM COMMENTS WHERE POSTNO = #{postNo}
+   </select>
 
-	<select id="modifyList" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-		SELECT * FROM POST where POSTNO= #{postNo}
-	</select>
-	
-	<update id="modifyExcute" parameterType="String" >
-	UPDATE POST SET EMAIL = #{email},TITLE = #{title},CONTENT = #{content}, LOCATION = #{location}, TITLEIMAGE = #{titleImage}, IMAGES = #{images} WHERE POSTNO = #{postNo}
-	</update>
+   <select id="deleteComments" parameterType="String" >
+      DELETE FROM POST WHERE POSTNO = #{postNo}
+   </select>
 
-	<insert id="addcomments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
-		<![CDATA[INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps)
-		 VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},COMMENTS_SEQ.CURRVAL,#{grpl},NVL((SELECT MAX(grps) FROM COMMENTS),0)+1)
-		 ]]>
-	</insert>
-	
-	<select id="getcomments" parameterType="String" resultType="com.whereru.main.BoardDTO.CommentsDTO">
-		SELECT * FROM COMMENTS where POSTNO= #{postNo} ORDER BY grps ASC
-	</select>
-	
-	<select id="searchTitle" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-		
-		SELECT * FROM POST WHERE TITLE LIKE '%'||#{keyword}||'%'
-		
-	</select>
-	
-	<select id="searchContent" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-		
-		SELECT * FROM POST WHERE CONTENT LIKE '%'||#{keyword}||'%' 
-		
-	</select>
-	
-	<select id="searchWriter" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
-	
-		SELECT * FROM POST WHERE EMAIL LIKE '%'||#{keyword}||'%'
-	
-	</select>
-	
-	<update id="beforeAddReply" parameterType="com.whereru.main.BoardDTO.CommentsDTO" >
-		<![CDATA[
-			UPDATE (SELECT * FROM COMMENTS WHERE grps > NVL((SELECT MAX(grps) FROM COMMENTS 
-			WHERE grp=#{grp}),(SELECT GRPS FROM COMMENTS WHERE COMMENTNO=#{grp}))) 
-			SET grps = grps+1
-		 ]]>
-	</update>
-	
-	<insert id="addReplyComments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
-		<![CDATA[
-		INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps) 
-		VALUES (COMMENTS_SEQ.nextval,
-				#{postNo},
-				#{content},
-				#{grp},
-				NVL( (SELECT grpl FROM COMMENTS WHERE COMMENTNO=#{grp}) , 0 ) + 1,
-				NVL( (SELECT MAX(grps) FROM COMMENTS WHERE grp =#{grp}) , (SELECT grps FROM COMMENTS WHERE COMMENTNO=#{grp}) ) + 1)
-		 ]]>
-	</insert>
+   <select id="modifyList" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      SELECT * FROM POST where POSTNO= #{postNo}
+   </select>
+   
+   <update id="modifyExcute" parameterType="String" >
+      UPDATE POST SET CONTENT = #{content}, HASHTAG = #{hashtag}, LOCATION = #{location}, TITLEIMAGE = #{titleImage}, IMAGES = #{images} WHERE POSTNO = #{postNo}
+   </update>
+
+   <insert id="addcomments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
+      <![CDATA[
+      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps)
+       VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},COMMENTS_SEQ.CURRVAL,#{grpl},0)
+       ]]>
+   </insert>
+   
+   <select id="getcomments" parameterType="String" resultType="com.whereru.main.BoardDTO.CommentsDTO">
+      SELECT * FROM COMMENTS WHERE POSTNO= #{postNo} ORDER BY GRP DESC, GRPS ASC
+   </select>
+
+   <select id="searchWriter" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+   
+      SELECT * FROM POST WHERE EMAIL LIKE '%'||#{keyword}||'%'
+   
+   </select>
+   
+   <select id="searchTitle" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      
+      SELECT * FROM POST WHERE TITLE LIKE '%'||#{keyword}||'%'
+      
+   </select>
+   
+   <select id="searchContent" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      
+      SELECT * FROM POST WHERE CONTENT LIKE '%'||#{keyword}||'%' 
+      
+   </select>
+
+   <select id="searchLocation" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      
+      SELECT * FROM POST WHERE LOCATION LIKE '%'||#{keyword}||'%' 
+      
+   </select>
+
+   <select id="searchHashtag" parameterType="String" resultType="com.whereru.main.BoardDTO.MainDTO">
+      
+      SELECT * FROM POST WHERE HASHTAG LIKE '%'||#{keyword}||'%' 
+      
+   </select>
+   
+   
+   <update id="beforeAddReply" parameterType="com.whereru.main.BoardDTO.CommentsDTO" >
+      <![CDATA[
+         UPDATE COMMENTS SET grps = grps + 1 
+          WHERE grp = #{grp} AND grps >#{grps}
+       ]]>
+   </update>
+   
+   <insert id="addReplyComments" parameterType="com.whereru.main.BoardDTO.CommentsDTO">
+      <![CDATA[
+      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps) 
+       VALUES
+         (COMMENTS_SEQ.nextval,
+         #{postNo},
+         #{content},
+         #{grp},
+         (#{grpl}+1),
+         (#{grps}+1))
+       ]]>
+   </insert>
+   
+   <update id="deleteReplyComments" parameterType="String" >
+      <![CDATA[
+         UPDATE COMMENTS SET CONTENT = '(삭제된 댓글입니다.)'
+          WHERE COMMENTNO = #{commentNo} 
+       ]]>
+   </update>
 </mapper>

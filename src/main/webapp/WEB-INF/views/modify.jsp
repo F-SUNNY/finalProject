@@ -36,16 +36,12 @@
 	<form action="modifyExcute.do?postNo=${list.postNo}&${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
 		<div class="form-group">
-			<label for="email">EMAIL</label>
-			<input name="email" type="text" class="email form-control" placeholder="${list.email}" value="${list.email}" required>
-		</div>
-		<div class="form-group">
-			<label for="title">TITLE</label>
-			<input name="title" type="text" class="title form-control" placeholder="${list.title}" value="${list.title}" required>
-		</div>
-		<div class="form-group">
 			<label for="content">CONTENT</label>
 			<input name="content" type="text" class="content form-control" placeholder="${list.content}" value="${list.content}" required>
+		</div>
+		<div class="form-group">
+			<label for="hashtag">#HASHTAG</label>
+			<input name="hashtag" type="text" class="content form-control" placeholder="${list.hashtag}" value="${list.hashtag}" required>
 		</div>
 		<input name="location" type="hidden" class="location" placeholder="location" value="${list.location}" required>
 		<div class="input-group mb-3">

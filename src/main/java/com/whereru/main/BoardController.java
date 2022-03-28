@@ -67,7 +67,7 @@ public class BoardController {
 		String[] test =  images.split("/");
 		titleImage = test[0];
 		
-		MainDTO dto = new MainDTO(multi.getParameter("email"),multi.getParameter("title"),multi.getParameter("content"),multi.getParameter("location"),titleImage,images);
+		MainDTO dto = new MainDTO(multi.getParameter("content"),multi.getParameter("hashtag"),multi.getParameter("location"),titleImage,images);
 		dao.write(dto);
 		return "home";
 	}
@@ -136,7 +136,7 @@ public class BoardController {
 		String[] test =  images.split("/");
 		titleImage = test[0];
 		
-		MainDTO dto = new MainDTO(multi.getParameter("postNo"),multi.getParameter("email"),multi.getParameter("title"),multi.getParameter("content"),multi.getParameter("location"),titleImage,images);
+		MainDTO dto = new MainDTO(multi.getParameter("postNo"),multi.getParameter("content"),multi.getParameter("hashtag"),multi.getParameter("location"),titleImage,images);
 		dao.modifyExcute(dto);
 		return "redirect:list";
 	}
@@ -152,11 +152,19 @@ public class BoardController {
 	
 	@ResponseBody
 	@RequestMapping("/addReplyComments.do")
-	public void addReplyComments(@RequestParam("postNo") String postNo,@RequestParam("grp") String grp, @RequestParam("content") String content){
+	public void addReplyComments(@RequestParam("postNo") String postNo,@RequestParam("grp") String grp, @RequestParam("content") String content,@RequestParam("grpl") String grpl,@RequestParam("grps") String grps){
 		int Igrp = Integer.parseInt(grp);
-		CommentsDTO dto = new CommentsDTO(postNo,Igrp,content);
+		int Igrpl = Integer.parseInt(grpl);
+		int Igrps = Integer.parseInt(grps);
+		CommentsDTO dto = new CommentsDTO(postNo,Igrp,content,Igrpl,Igrps);
 		dao.addReplyComments(dto);
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping("/deleteReplyComments.do")
+	public void deleteReplyComments(@RequestParam("commentNo") String commentNo){
+		dao.deleteReplyComments(commentNo);		
 	}
 	
 	@ResponseBody

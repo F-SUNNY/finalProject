@@ -17,6 +17,7 @@ public interface InterfaceBoardDAO {
 	public void modifyExcute(MainDTO dto);
 	public void addcomments(CommentsDTO dto);
 	public void addReplyComments(CommentsDTO dto);
+	public void deleteReplyComments(String commentNo);
 	public ArrayList<CommentsDTO> getcomments(String postNo);
 	public ArrayList<MainDTO> search(String keyword,String searchVal);
 	

@@ -39,6 +39,8 @@ public class MainDAO implements InterfaceBoardDAO{
 	@Override
 	public void deleteBoard(String postNo) {
 		sqlSession.delete("deleteBoard", postNo);
+		sqlSession.delete("deleteComments", postNo);
+		
 	}
 	
 	
@@ -62,7 +64,8 @@ public class MainDAO implements InterfaceBoardDAO{
 	
 	
 	@Override
-	public void addReplyComments(CommentsDTO dto) {
+	public void addReplyComments(CommentsDTO dto){
+		
 		sqlSession.update("beforeAddReply", dto);
 		sqlSession.insert("addReplyComments", dto);
 	}
@@ -77,24 +80,33 @@ public class MainDAO implements InterfaceBoardDAO{
 	@Override
 	public ArrayList<MainDTO> search(String keyword, String searchVal) {
 		ArrayList<MainDTO> dto = new ArrayList<MainDTO>();
-		System.out.println( "keyword ="+  keyword);
-		System.out.println("searchVal = "+searchVal);
-		if(searchVal.equals("title")) {
+		
+		if(searchVal.equals("writer")) {
+			dto = (ArrayList)sqlSession.selectList("searchWriter", keyword);
+			return dto;
+		}else if(searchVal.equals("title")) {
 			dto = (ArrayList)sqlSession.selectList("searchTitle", keyword);
-			System.out.println("타이틀 실행");
 			return dto;
 		}else if(searchVal.equals("content")) {
 			dto = (ArrayList)sqlSession.selectList("searchContent", keyword);
-			System.out.println("컨텐츠 실행");
+			return dto;
+		}
+		else if(searchVal.equals("location")) {
+			dto = (ArrayList)sqlSession.selectList("searchLocation", keyword);
 			return dto;
 		}else {
-			dto = (ArrayList)sqlSession.selectList("searchWriter", keyword);			
-			System.out.println("작성자 실행");
+			dto = (ArrayList)sqlSession.selectList("searchHashtag", keyword);			
 			return dto;
 		}
 		
 		
 	}
 
+	@Override
+	public void deleteReplyComments(String commentNo) {
+		sqlSession.update("deleteReplyComments", commentNo);
+	}
+	
+	
 	
 }

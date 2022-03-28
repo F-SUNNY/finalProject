@@ -17,6 +17,8 @@
 			        		<option value="writer" selected>작성자</option>
 			        		<option value="title">제목</option>
 			        		<option value="content">내용</option>
+			        		<option value="location">장소</option>
+			        		<option value="hashtag">#HashTag</option>
 			        	</select>
 			      	
 			      	</div>

@@ -24,24 +24,22 @@ public class MainDTO {
 	}
 
 
-	public MainDTO(String postNo,String email, String title,String content,String location,String titleImage,String images) {
+	public MainDTO(String postNo,String content,String hashtag,String location,String titleImage,String images) {
 		super();
 		this.postNo = postNo;
-		this.email = email;
 		this.titleImage = titleImage;
 		this.images = images;
-		this.title = title;
 		this.content = content;
 		this.location = location;
+		this.hashtag = hashtag;
 		
 	}
 	
-	public MainDTO(String email, String title,String content,String location,String titleImage,String images) {
+	public MainDTO(String content,String hashtag, String location,String titleImage,String images) {
 		super();
-		this.email = email;
+		this.hashtag = hashtag;
 		this.titleImage = titleImage;
 		this.images = images;
-		this.title = title;
 		this.content = content;
 		this.location = location;
 		

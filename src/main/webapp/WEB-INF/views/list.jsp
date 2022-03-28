@@ -42,7 +42,7 @@ ul{
 			<c:forEach items="${list}" var="list" >
 				<div class="post mr-2">
 					<div class="post-top border rounded">
-						<img class="titleimg" width="280px" src="images/${list.titleImage}" data-value="${list.postNo}" data-toggle="modal" data-target="#modal-reg">
+						<img class="titleimg" style="cursor : pointer;" width="280px" src="images/${list.titleImage}" data-value="${list.postNo}" data-toggle="modal" data-target="#modal-reg">
 					</div>
 					<div class="post-bottom border text-center" style="overflow: hidden;">
 						<h5 style="font-size: 15px;">작성자 : ${list.email}</h5>
@@ -86,11 +86,11 @@ ul{
                         </ul>
 						</li>
                         <li class="list-group-item mb-1 d-flex row mx-0">
-                            <div class="col-6"><i class="modal-icon fa-regular fa-heart"></i>fa-heart</div>
-                            <div class="col-3"><i class="modal-icon fa-regular fa-bookmark"></i>fa-bookmark</div>
-                            <div class="col-3"><i class="modal-icon fa-regular fa-comment-dots"></i>fa-comment-dots</div>
+                            <div class="col-6"><i class="modal-icon fa-regular fa-heart"></i></div>
+                            <div class="col-3"><i class="modal-icon fa-regular fa-bookmark"></i></div>
+                            <div class="col-3"><i class="modal-icon fa-regular fa-comment-dots"></i></div>
                         </li>
-                        <li class="list-group-item comments"><i class="modal-icon fa-regular fa-comment-dots"></i>comment
+                        <li class="list-group-item "><i class="modal-icon fa-regular fa-comment-dots comments"></i>
 								
                         </li>
                         <li>
@@ -177,8 +177,8 @@ $(document).ready(function() {
 		
 		let content = $('.comment').val();
 		let grpl = $('.grpl').attr('data-value');
-		console.log(grpl);
 		
+
 		$.ajax({
 			url : 'addcomments.do',
 			type : 'post',
@@ -193,6 +193,7 @@ $(document).ready(function() {
 	 		success : function (data) {
 	 			console.log('success');
 	 			getComments();
+	 			$('.comment').val("");
 			},
 			error : function (data) {
 				console.log('ERROR');
@@ -218,38 +219,46 @@ $(document).ready(function() {
 	        	 console.log(data);
 		           	for(var i=0; i<data.length; i++){
 		           		comments += '<div>';
-						for(var y=0; y<data[i].grpl; y++){
+						
+		           		for(var y=0; y<data[i].grpl; y++){
 		           		comments += '&nbsp;&nbsp;';
 						}
-		           		comments += '<span>'+data[i].content+'</span>&nbsp;&nbsp;&nbsp;';
-						comments += '<span class ="replyClick" style="font-size:5px;">답글달기</span><br/>';
+		           		
+		           		comments += '<span style="font-size:15px;">'+data[i].content+'</span>&nbsp;&nbsp;&nbsp;';
+						comments += '<span class ="replyClick" style="font-size:5px; cursor : pointer;">답글달기</span>&nbsp;';
+						comments += '<i class="fa-solid fa-heart" style="font-size:5px; color:red; cursor : pointer;"></i>&nbsp;';
+						comments += '<span class ="addHeart" style="font-size:5px;">'+data[i].likes+'</span>&nbsp;';
+						comments += '<i class="fa-solid fa-x deleteRe" style="font-size:5px; color:red; cursor : pointer;" data-no="'+data[i].commentNo+'" ></i><br/>';
 						comments += '<div class="row">';
-
-						comments += '<input type="hidden" class="col-xs-10 replyComment" data-value="'+data[i].grp+'">'
-						comments += '<input type="hidden" class="btn btn-outline-success addreplyComment" role="button" value="전송"></input>'
-
-						comments += '</div>'
+						comments += '<input type="hidden" class="col-xs-10 replyComment" data-grp="'+data[i].grp+'" data-grpl="'+data[i].grpl+'" " data-grps="'+data[i].grps+'">';
+						comments += '<input type="hidden" class="btn btn-outline-success addreplyComment" role="button" value="전송"></input>';
+						comments += '</div>';
 						comments += '</div>';
 		           	}
 		           	
 					$('.comments').html(comments);
-					$('.replyClick').click(function () {
+					
+					$('.replyClick').click(function () { //re댓글 작성
+						
 						$(this).siblings('.row').children('.replyComment').attr('type','text');
 						$(this).siblings('.row').children('.addreplyComment').attr('type','button');
 						
 						
 						$('.addreplyComment').click(function () {
-						let content = $(this).siblings('.replyComment').val();
-						let grp = $(this).siblings('.replyComment').attr('data-value');
-						console.log('content = '+content);
-						console.log('grp = '+grp);
+							let content = $(this).siblings('.replyComment').val();
+							let grp = $(this).siblings('.replyComment').attr('data-grp');
+							let grpl = $(this).siblings('.replyComment').attr('data-grpl');
+							let grps = $(this).siblings('.replyComment').attr('data-grps');
+					
 
 							$.ajax({
 								url : 'addReplyComments.do',
 								type : 'post',
 								data : {postNo : postNo,
 										content : content,
-										grp : grp},
+										grp : grp,
+										grpl : grpl,
+										grps : grps},
 								beforeSend: function(xhr){
 							 	  	var token = $("meta[name='_csrf']").attr('content');
 							 		var header = $("meta[name='_csrf_header']").attr('content');
@@ -264,6 +273,32 @@ $(document).ready(function() {
 								}
 								
 							});
+						});
+						
+					});
+					
+					$('.deleteRe').click(function () { //re댓글 삭제
+					
+
+						let commentNo = $(this).attr('data-no');
+					
+						$.ajax({
+							url : 'deleteReplyComments.do',
+							type : 'post',
+							data : {commentNo : commentNo},
+							beforeSend: function(xhr){
+						 	  	var token = $("meta[name='_csrf']").attr('content');
+						 		var header = $("meta[name='_csrf_header']").attr('content');
+					 		    xhr.setRequestHeader(header, token);
+					 		},
+					 		success : function (data) {
+					 			console.log('success');
+					 			getComments();
+							},
+							error : function (data) {
+								console.log('ERROR');
+							}
+							
 						});
 						
 					});
