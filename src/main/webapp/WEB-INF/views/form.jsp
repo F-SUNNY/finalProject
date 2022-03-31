@@ -34,14 +34,17 @@
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
 	<form id="addForm" action="uploadMulti?${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
+		
 		<div class="form-group">
-			<label for="content">CONTENT</label>
-			<input name="content" type="text" class="content form-control" placeholder="content" required>
+			<h2>CONTENT</h2>
+			<textarea class="form-control col-sm-5 content" name="content" rows="10" cols="20" placeholder="content" required></textarea>
 		</div>
+		
 		<div class="form-group">
 			<label for="hashtag">#HASHTAG</label>
 			<input name="hashtag" type="text" class="title form-control" placeholder="#HASHTAG" required>
 		</div>
+		
 		<input name="location" type="hidden" class="location" placeholder="location" required>
 		<div class="input-group mb-3">
 			<div class="custom-file">
@@ -49,6 +52,7 @@
 				<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
 			</div>
 		</div>
+
 		<div class="form-group">
 			<label for="email">Address</label>
 		<input type="text" id="sample5_address" class="form-control" placeholder="Address" readonly>

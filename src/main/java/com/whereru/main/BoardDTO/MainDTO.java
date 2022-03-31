@@ -6,12 +6,10 @@ public class MainDTO {
 	private String postNo;
 	private String email;
 	private String plan;
-	private String withUser;
 	private String titleImage;
 	private String images;
 	private String title;
 	private String content;
-	private int likes;
 	private String hashtag;
 	private Timestamp regDate;
 	private String location;
@@ -20,7 +18,6 @@ public class MainDTO {
 
 	public MainDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -71,13 +68,6 @@ public class MainDTO {
 		this.plan = plan;
 	}
 
-	public String getWithUser() {
-		return withUser;
-	}
-
-	public void setWithUser(String withUser) {
-		this.withUser = withUser;
-	}
 
 	public String getTitleImage() {
 		return titleImage;
@@ -109,14 +99,6 @@ public class MainDTO {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public int getLikes() {
-		return likes;
-	}
-
-	public void setLikes(int likes) {
-		this.likes = likes;
 	}
 
 	public String getHashtag() {

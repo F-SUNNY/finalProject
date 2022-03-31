@@ -39,15 +39,15 @@ ul{
 <section class="container mb-4">
 	<div class="result_posts">
 		<div class="posts d-flex flex-wrap justify-content-start mt-2">
-			<c:forEach items="${list}" var="list" >
+			<c:forEach items="${list}" var="post" >
 				<div class="post mr-2">
 					<div class="post-top border rounded">
-						<img class="titleimg" style="cursor : pointer;" width="280px" src="images/${list.titleImage}" data-value="${list.postNo}" data-toggle="modal" data-target="#modal-reg">
+						<img class="titleimg" style="cursor : pointer;" width="280px" src="images/${post.titleImage}" data-value="${post.postNo}" data-toggle="modal" data-target="#modal-reg">
 					</div>
 					<div class="post-bottom border text-center" style="overflow: hidden;">
-						<h5 style="font-size: 15px;">작성자 : ${list.email}</h5>
-						<h5 style="font-size: 15px;">제목 : ${list.title}</h5>
-						<h5 style="font-size: 15px;">내용 : ${list.content}</h5>
+						<i class="fa-solid fa-heart" style="color:red; cursor : pointer;"></i>
+						<i class="fa-solid fa-comment-dots"></i>
+						<i class="fa-solid fa-eye"></i>&nbsp;${post.views}
 					</div>
 				</div>
 			</c:forEach>
@@ -308,8 +308,6 @@ $(document).ready(function() {
 	         }
 	     });
 	}
-	
-	
 	
 	
 });

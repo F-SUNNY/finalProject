@@ -46,11 +46,10 @@ public class BoardController {
 		String tmp="";
 		List<MultipartFile> fileList = multi.getFiles("img");
 				
-		//Áý¿¡¼­ ÀÛ¾÷ÇÒ½Ã
-		//String path = "C:/Fsunny/whereRU/src/main/webapp/resources/images/";
-		
-		//ÇÐ¿ø¿¡¼­ ÀÛ¾÷ÇÒ½Ã
-		String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½Ò½ï¿½
+		String path = "C:/Users/user/git/finalProject/src/main/webapp/resources/images/";
+		//ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½Ò½ï¿½
+		//String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
 		
 		for (MultipartFile mf : fileList) {
 			String originalFileName = mf.getOriginalFilename();
@@ -59,14 +58,16 @@ public class BoardController {
 			try {
 				mf.transferTo(new File(path + prefix + originalFileName));
 				tmp+=prefix + originalFileName+"/";
+			
 			} catch (IllegalStateException | IOException e) {
 				e.getMessage(); 
+				System.out.println(e.getMessage());
 			}
 		}
-		images = tmp;
-		String[] test =  images.split("/");
-		titleImage = test[0];
 		
+		images = tmp;
+		String[] test = images.split("/");
+		titleImage = test[0];
 		MainDTO dto = new MainDTO(multi.getParameter("content"),multi.getParameter("hashtag"),multi.getParameter("location"),titleImage,images);
 		dao.write(dto);
 		return "home";
@@ -115,11 +116,11 @@ public class BoardController {
 		
 		List<MultipartFile> fileList = multi.getFiles("img");
 		
-		//Áý¿¡¼­ ÀÛ¾÷ÇÒ½Ã
-		//String path = "C:/Fsunny/whereRU/src/main/webapp/resources/images/";
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½Ò½ï¿½
+		String path = "C:/Users/user/git/finalProject/src/main/webapp/resources/images/";
 		
-		//ÇÐ¿ø¿¡¼­ ÀÛ¾÷ÇÒ½Ã
-		String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
+		//ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½Ò½ï¿½
+		//String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
 		
 		for (MultipartFile mf : fileList) {
 			String originalFileName = mf.getOriginalFilename();

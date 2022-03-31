@@ -24,7 +24,6 @@ public class MainDAO implements InterfaceBoardDAO{
 	@Override
 	public ArrayList<MainDTO> list() {
 		ArrayList<MainDTO> list =  (ArrayList)sqlSession.selectList("list");
-		
 		return list;
 	}
 
@@ -83,9 +82,6 @@ public class MainDAO implements InterfaceBoardDAO{
 		
 		if(searchVal.equals("writer")) {
 			dto = (ArrayList)sqlSession.selectList("searchWriter", keyword);
-			return dto;
-		}else if(searchVal.equals("title")) {
-			dto = (ArrayList)sqlSession.selectList("searchTitle", keyword);
 			return dto;
 		}else if(searchVal.equals("content")) {
 			dto = (ArrayList)sqlSession.selectList("searchContent", keyword);
