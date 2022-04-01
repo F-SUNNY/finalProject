@@ -13,7 +13,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
 	<!-- 게시글 불러오기 -->
    <select id="list" resultType="com.whereru.main.BoardDTO.MainDTO" >
-      SELECT * FROM POST ORDER BY POSTNO DESC
+      SELECT 
+        POSTNO,
+      	EMAIL,
+      	PLAN,
+      	TITLEIMAGE,
+	    IMAGES,
+	    CONTENT,
+	    HASHTAG,
+	    REGDATE,
+	    LOCATION,
+	    VIEWS,
+	    AUTHORITY,
+	 	(SELECT count(*) from COMMENTS where comments.postno = POST.postno)comments, 
+		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes
+	 FROM POST 
    </select>
 
    
@@ -103,4 +117,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           WHERE COMMENTNO = #{commentNo} 
        ]]>
    </update>
+   
+   <insert id="addLike">
+  	 INSERT INTO post_like(POSTLIKENO,POSTNO,LIKES) VALUES (POST_LIKE_SEQ.NEXTVAL,#{postNo},1)
+   
+   </insert>
 </mapper>

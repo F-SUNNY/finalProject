@@ -45,8 +45,10 @@ ul{
 						<img class="titleimg" style="cursor : pointer;" width="280px" src="images/${post.titleImage}" data-value="${post.postNo}" data-toggle="modal" data-target="#modal-reg">
 					</div>
 					<div class="post-bottom border text-center" style="overflow: hidden;">
-						<i class="fa-solid fa-heart" style="color:red; cursor : pointer;"></i>
-						<i class="fa-solid fa-comment-dots"></i>
+						
+					<!-- LIKE when test 구문 추가 예쩡 -->
+						<i class="fa-solid fa-heart likes" data-postno="${post.postNo}" style="color:red; cursor : pointer;"></i>${post.likes}
+						<i class="fa-solid fa-comment-dots"></i>&nbsp;${post.comments}
 						<i class="fa-solid fa-eye"></i>&nbsp;${post.views}
 					</div>
 				</div>
@@ -117,6 +119,31 @@ ul{
 <script type="text/javascript">
 $(document).ready(function() {
 	let postNo = "";
+	
+	$(".likes").click(function () {
+		postNo = $(this).attr('data-postno');
+		console.log(postNo);
+		$.ajax({
+			url :'addLike.do',
+			data : {postNo : postNo},
+			type : 'post',
+			beforeSend: function(xhr){
+		 	   	var token = $("meta[name='_csrf']").attr('content');
+		 		var header = $("meta[name='_csrf_header']").attr('content');
+	 		    xhr.setRequestHeader(header, token);
+	 		},
+			success : function () {
+				console.log('하트날리기 성공');				
+			},
+			error : function () {
+				console.log('하트날리기 실패');
+			}
+		});
+	});
+	
+	
+	
+	
 	$(".titleimg").click(function(){
         postNo = $(this).attr("data-value");
         

@@ -102,6 +102,11 @@ public class MainDAO implements InterfaceBoardDAO{
 	public void deleteReplyComments(String commentNo) {
 		sqlSession.update("deleteReplyComments", commentNo);
 	}
+
+	@Override
+	public void addLike(String postNo) {
+		sqlSession.insert("addLike", postNo);
+	}
 	
 	
 	

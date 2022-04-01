@@ -14,6 +14,8 @@ public class MainDTO {
 	private Timestamp regDate;
 	private String location;
 	private int views;
+	private int comments;
+	private int likes;
 	private String authority;
 
 	public MainDTO() {
@@ -42,6 +44,26 @@ public class MainDTO {
 		
 	}
 
+
+
+	public int getLikes() {
+		return likes;
+	}
+
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+
+	public int getComments() {
+		return comments;
+	}
+
+
+	public void setComments(int comments) {
+		this.comments = comments;
+	}
 
 
 	public String getPostNo() {

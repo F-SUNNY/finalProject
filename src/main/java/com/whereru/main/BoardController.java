@@ -186,4 +186,10 @@ public class BoardController {
 		
 		return "list";
 	}
+
+	@RequestMapping("/addLike.do")
+	public String addLike(@RequestParam("postNo") String postNo) {
+		dao.addLike(postNo);
+		return "redirect:list";
+	}
 }
