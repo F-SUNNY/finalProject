@@ -105,7 +105,14 @@ public class MainDAO implements InterfaceBoardDAO{
 
 	@Override
 	public void addLike(String postNo) {
+		//이메일 추가예정
 		sqlSession.insert("addLike", postNo);
+	}
+
+	@Override
+	public void deleteLike(String postNo) {
+		//이메일 추가예정
+		sqlSession.delete("deleteLike", postNo);
 	}
 	
 	

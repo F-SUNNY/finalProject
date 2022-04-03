@@ -118,8 +118,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        ]]>
    </update>
    
+   <!-- 좋아요 추가 	//이메일 추가예정-->
    <insert id="addLike">
+  	
   	 INSERT INTO post_like(POSTLIKENO,POSTNO,LIKES) VALUES (POST_LIKE_SEQ.NEXTVAL,#{postNo},1)
    
    </insert>
+   
+   <!-- <delete id="deleteLike"> 이메일 추가예정
+   
+   	DELETE INTO POST_LIKE WHERE POSTNO=#{POSTNO} AND EMAIL =#{EMAIL}
+   </delete> -->
 </mapper>

@@ -39,6 +39,7 @@ ul{
 <section class="container mb-4">
 	<div class="result_posts">
 		<div class="posts d-flex flex-wrap justify-content-start mt-2">
+			
 			<c:forEach items="${list}" var="post" >
 				<div class="post mr-2">
 					<div class="post-top border rounded">
@@ -46,13 +47,32 @@ ul{
 					</div>
 					<div class="post-bottom border text-center" style="overflow: hidden;">
 						
-					<!-- LIKE when test 구문 추가 예쩡 -->
-						<i class="fa-solid fa-heart likes" data-postno="${post.postNo}" style="color:red; cursor : pointer;"></i>${post.likes}
+						<!--<c:choose>
+							<c:when test ="비로그인일때">
+								<i class="fa-solid fa-heart" style="color:red;"></i>${post.likes}
+							</c:when>
+							
+							<c:otherwise>
+								<c:set var="사용할변수명" value="불러오는 값"/>
+								<c:choose>
+									<c:when test="안눌렀을때">
+										<i class="fa-solid fa-heart dislike" data-postno="${post.postNo}" style="color:black; cursor : pointer;"></i>${post.likes}
+									</c:when>
+									
+									<c:otherwise>
+										<i class="fa-solid fa-heart like" data-postno="${post.postNo}" style="color:red; cursor : pointer;"></i>${post.likes}	
+									</c:otherwise>
+								</c:choose>			
+							</c:otherwise>	
+						</c:choose>-->
+					  
+						<i class="fa-solid fa-heart like" data-postno="${post.postNo}" style="color:red; cursor : pointer;"></i>${post.likes}
 						<i class="fa-solid fa-comment-dots"></i>&nbsp;${post.comments}
 						<i class="fa-solid fa-eye"></i>&nbsp;${post.views}
 					</div>
 				</div>
 			</c:forEach>
+			
 		</div>
 	</div>
 </section>
@@ -120,12 +140,12 @@ ul{
 $(document).ready(function() {
 	let postNo = "";
 	
-	$(".likes").click(function () {
+	$(".like").click(function () {
 		postNo = $(this).attr('data-postno');
 		console.log(postNo);
 		$.ajax({
 			url :'addLike.do',
-			data : {postNo : postNo},
+			data : {postNo : postNo},//id 추가예정
 			type : 'post',
 			beforeSend: function(xhr){
 		 	   	var token = $("meta[name='_csrf']").attr('content');
@@ -133,13 +153,38 @@ $(document).ready(function() {
 	 		    xhr.setRequestHeader(header, token);
 	 		},
 			success : function () {
-				console.log('하트날리기 성공');				
+				console.log('하트날리기 성공');	
+				$(this).attr('class','dislike');//클래스 병경
+				$(this).css('color','black') //css변겅
 			},
 			error : function () {
 				console.log('하트날리기 실패');
 			}
 		});
 	});
+	
+	/*$(".dislike").click(function () {
+		postNo = $(this).attr('data-postno');
+		console.log(postNo);
+		$.ajax({
+			url :'deleteLike.do',
+			data : {postNo : postNo},//id 추가예정
+			type : 'post',
+			beforeSend: function(xhr){
+		 	   	var token = $("meta[name='_csrf']").attr('content');
+		 		var header = $("meta[name='_csrf_header']").attr('content');
+	 		    xhr.setRequestHeader(header, token);
+	 		},
+			success : function () {
+				console.log('하트파괴술 성공');	
+				$(this).attr('class','like');//클래스 병경
+				$(this).css('color','red') //css변겅
+			},
+			error : function () {
+				console.log('하트파괴술 실패');
+			}
+		});
+	});*/
 	
 	
 	

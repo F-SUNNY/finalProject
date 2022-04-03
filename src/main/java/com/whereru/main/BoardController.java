@@ -189,7 +189,15 @@ public class BoardController {
 
 	@RequestMapping("/addLike.do")
 	public String addLike(@RequestParam("postNo") String postNo) {
+		//이메일 추가예정
 		dao.addLike(postNo);
+		return "redirect:list";
+	}
+
+	@RequestMapping("/deleteLike.do")
+	public String deleteLike(@RequestParam("postNo") String postNo) {
+		//이메일 추가예정
+		dao.deleteLike(postNo);
 		return "redirect:list";
 	}
 }

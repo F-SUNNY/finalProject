@@ -14,6 +14,7 @@ public interface InterfaceBoardDAO {
 	public ArrayList<MainDTO> getlist(String boardNum);
 	public void deleteBoard(String boardNum);
 	public void addLike(String postNo);
+	public void deleteLike(String postNo);
 	public ArrayList<MainDTO> modifyList(String boardNum);
 	public void modifyExcute(MainDTO dto);
 	public void addcomments(CommentsDTO dto);
