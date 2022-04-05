@@ -54,8 +54,12 @@ public class PostController {
 	}
 	
 	@RequestMapping("getPost")
-	public String getPost() {
-		
+	public String getPost(Model model) {
+		String user = Constant.username;
+		ArrayList<PostDto> list = dao.list(user);
+		model.addAttribute("list", list);
+		model.addAttribute("user",Constant.username);
+		System.out.println(Constant.username);
 		return"post/postMain";
 	}
 	
@@ -210,7 +214,7 @@ public class PostController {
 
 	@RequestMapping("addLike.do")
 	public String addLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
-		//이메일 추가예정
+		
 		PostLikeDto dto = new PostLikeDto(postNo, email);
 		dao.addLike(dto);
 		return "redirect:postMain";
@@ -218,7 +222,7 @@ public class PostController {
 
 	@RequestMapping("deleteLike.do")
 	public String deleteLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
-		//이메일 추가예정
+		
 		PostLikeDto dto = new PostLikeDto(postNo, email);
 		dao.deleteLike(dto);
 		return "redirect:postMain";

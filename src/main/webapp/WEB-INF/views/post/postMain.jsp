@@ -34,7 +34,9 @@ ul{
 <body>
 <%@ include file="../includes/header.jsp" %>
 <input type="hidden" value = "${user}" id="user">
-<section id ="main-body" class="container mb-4">
+<div id ="main-body">
+<section  class="container mb-4">
+	
 	<div class="result_posts">
 		<div class="posts d-flex flex-wrap justify-content-start mt-2">
 		<a href="addPost">추가 ㄱ</a>
@@ -71,7 +73,7 @@ ul{
 		</div>
 	</div>
 </section>
-
+</div>
 <!--  modal And Caouosel -->
 <div class="modal fade" id="modal-reg">
     <div class="modal-dialog modal-dialog-centered modal-xl">

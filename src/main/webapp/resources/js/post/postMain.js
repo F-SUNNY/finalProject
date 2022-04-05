@@ -7,7 +7,6 @@ $(document).ready(function() {
 	
 	$(".like").on('click',function () {
 		postNo = $(this).attr('data-postno');
-		console.log($(this));
 		
 		$.ajax({
 			url :'addLike.do',
@@ -21,6 +20,7 @@ $(document).ready(function() {
 	 		    xhr.setRequestHeader(header, token);
 	 		},
 			success : function () {
+				getPost();
 				console.log('하트날리기 성공');	
 			},
 			error : function () {
@@ -29,7 +29,7 @@ $(document).ready(function() {
 		});
 	});
 	
-	/*function getPost(){
+	function getPost(){
 		$.ajax({
 			url :'getPost.do',
 			type : 'get',
@@ -39,7 +39,6 @@ $(document).ready(function() {
 	 		    xhr.setRequestHeader(header, token);
 	 		},
 			success : function (data) {
-				console.log(data);
 				$('#main-body').html(data);
 				console.log('JSP뿌리기 성공');	
 			},
@@ -47,34 +46,8 @@ $(document).ready(function() {
 				console.log('JSP뿌리기 실패');
 			}
 		});
-	}*/
+	}
 	
-	
-	$(".dislike").on('click',function () {
-		postNo = $(this).attr('data-postno');
-		$(this).attr('class','fa-solid fa-heart like');//클래스 병경
-		$(this).css('color','red') //css변겅
-		
-		$.ajax({
-			url :'deleteLike.do',
-			data : {
-				postNo : postNo,
-				email : email},//id 추가예정
-			type : 'post',
-			beforeSend: function(xhr){
-		 	   	var token = $("meta[name='_csrf']").attr('content');
-		 		var header = $("meta[name='_csrf_header']").attr('content');
-	 		    xhr.setRequestHeader(header, token);
-	 		},
-			success : function () {
-				console.log('하트파괴술 성공');	
-				
-			},
-			error : function () {
-				console.log('하트파괴술 실패');
-			}
-		});
-	});
 	
 	
 	$(".titleimg").click(function(){
@@ -249,11 +222,11 @@ $(document).ready(function() {
 						 		var header = $("meta[name='_csrf_header']").attr('content');
 					 		    xhr.setRequestHeader(header, token);
 					 		},
-					 		success : function (data) {
+					 		success : function () {
 					 			console.log('success');
 					 			getComments();
 							},
-							error : function (data) {
+							error : function () {
 								console.log('ERROR');
 							}
 							
