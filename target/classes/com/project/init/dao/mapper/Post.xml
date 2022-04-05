@@ -6,13 +6,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 게시글 작성 -->
-   <insert id="write" parameterType="String"> 
-      Insert into POST(POSTNO,CONTENT,HASHTAG,LOCATION,TITLEIMAGE,IMAGES)
-       values (POST_NO_SEQ.NEXTVAL,#{content},#{hashtag},#{location},#{titleImage},#{images})
+   <insert id="write" parameterType="com.project.init.dto.PostDto"> 
+      Insert into POST(EMAIL,POSTNO,CONTENT,HASHTAG,LOCATION,TITLEIMAGE,IMAGES,views)
+       values (#{email},POST_NO_SEQ.NEXTVAL,#{content},#{hashtag},#{location},#{titleImage},#{images},#{views})
    </insert>
    
 	<!-- 게시글 불러오기 -->
-   <select id="list" resultType="com.project.init.dto.PostDto" >
+   <select id="list" parameterType="String" resultType="com.project.init.dto.PostDto" >
       SELECT 
         POSTNO,
       	EMAIL,
@@ -26,7 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    VIEWS,
 	    AUTHORITY,
 	 	(SELECT count(*) from COMMENTS where comments.postno = POST.postno)comments, 
-		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes
+		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes,
+		(SELECT LIKES FROM POST_LIKE WHERE email = #{email,jdbcType=VARCHAR} AND POST_LIKE.postno=POST.postno) heart
 	 FROM POST ORDER BY POSTNO DESC
    </select>
 
@@ -118,15 +119,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        ]]>
    </update>
    
-   <!-- 좋아요 추가 	//이메일 추가예정-->
-   <insert id="addLike">
+   <!-- 좋아요 추가 -->
+   <insert id="addLike" parameterType="com.project.init.dto.PostLikeDto">
   	
-  	 INSERT INTO post_like(POSTLIKENO,POSTNO,LIKES) VALUES (POST_LIKE_SEQ.NEXTVAL,#{postNo},1)
+  	 INSERT INTO post_like(POSTLIKENO,POSTNO,EMAIL,LIKES) VALUES (POST_LIKE_SEQ.NEXTVAL,#{postNo},#{email},1)
    
    </insert>
    
-   <!-- <delete id="deleteLike"> 이메일 추가예정
+    <delete id="deleteLike" parameterType="com.project.init.dto.PostLikeDto"> 
    
-   	DELETE INTO POST_LIKE WHERE POSTNO=#{POSTNO} AND EMAIL =#{EMAIL}
-   </delete> -->
+   	DELETE FROM post_like WHERE POSTNO=#{postNo} AND EMAIL =#{email}
+   </delete> 
+
+   <select id="like" resultType="_int" parameterType="com.project.init.dto.PostLikeDto">
+  	
+  	 SELECT count(*) FROM post_like WHERE POSTNO=#{postNo} AND EMAIL =#{email}
+   
+   </select>
 </mapper>

@@ -34,7 +34,7 @@
  <section class="container mt-6 pt-1" style="margin: 200px, 0;">
 	<form id="addForm" action="uploadMulti?${_csrf.parameterName}=${_csrf.token }" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"/>
-		
+		<input type="hidden" name="email" value="${user}"/>		
 		<div class="form-group">
 			<h2>CONTENT</h2>
 			<textarea class="form-control col-sm-5 content" name="content" rows="10" cols="20" placeholder="content" required></textarea>
@@ -107,9 +107,7 @@ new daum.Postcode({
         geocoder.addressSearch(data.address, function(results, status) {
             // 정상적으로 검색이 완료됐으면
             if (status === daum.maps.services.Status.OK) {
-
                 var result = results[0]; //첫번째 결과의 값을 활용
-
                 // 해당 주소에 대한 좌표를 받아서
                 var coords = new daum.maps.LatLng(result.y, result.x);
                 // 지도를 보여준다.

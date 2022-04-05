@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.project.init.dto.CommentsDto;
 import com.project.init.dto.PostDto;
+import com.project.init.dto.PostLikeDto;
 
 
 public class PostDao implements PostIDao{
@@ -22,8 +23,8 @@ public class PostDao implements PostIDao{
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ArrayList<PostDto> list() {
-		ArrayList<PostDto> list =  (ArrayList)sqlSession.selectList("list");
+	public ArrayList<PostDto> list(String email) {
+		ArrayList<PostDto> list =  (ArrayList)sqlSession.selectList("list",email);
 		return list;
 	}
 
@@ -104,14 +105,18 @@ public class PostDao implements PostIDao{
 	}
 
 	@Override
-	public void addLike(String postNo) {
-		//이메일 추가예정
-		sqlSession.insert("addLike", postNo);
+	public void addLike(PostLikeDto dto) {
+		int tmp =sqlSession.selectOne("like", dto);
+		if(tmp ==0) {
+			sqlSession.insert("addLike", dto);			
+		}else {
+			sqlSession.delete("deleteLike", dto);
+		}
 	}
 
 	@Override
-	public void deleteLike(String postNo) {
-		//이메일 추가예정
-		sqlSession.delete("deleteLike", postNo);
+	public void deleteLike(PostLikeDto dto) {
+		
+		sqlSession.delete("deleteLike", dto);
 	}
 }

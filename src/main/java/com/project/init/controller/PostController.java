@@ -21,35 +21,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.project.init.dao.PostDao;
 import com.project.init.dto.CommentsDto;
 import com.project.init.dto.PostDto;
+import com.project.init.dto.PostLikeDto;
 import com.project.init.util.Constant;
 
 
 @Controller
 @RequestMapping("/post")
-//post로 매핑한 이유가 있을까? 그냥해도되는데
-//post로 연결되서 들어오는건 이 controller에서 처리하는 거임
-//href 나 url에 /post하고 하니까 계속안되서 그냥쓰니까 되네
-// /이거 붙이면 url 그..base부터 바뀜 그니까.. init/post 여야하는데 post로 잡혀서 안돼
-//나 작업할거 좀 남았는데 그냥 이렇게해 ? 아니면 init/post로해?
-// 지금 여기 컨트롤러로 들어오는건 init/post/~~~~ 이렇게 들어오는 거임
-// tomcat server에 init이 기본 url로 박혀있고 그 뒤로 post/~~ 이렇게 붙는거고
-// /post 하면 init 자리에 post로 들어가서 매핑이 안맞는거임
-//그럼 작업을 ........? post/postMain 하면 매핑이 안돼?
-//지금 되는데  ajax는 앞에 post/를 안붙히고사용중
 
-// 나도 확실치는 않는데 ajax같은거는 현재 주소 뒤에 붙음 그래서 그냥 저절로 되는거같아
-//ㅇㅋㅇㅋ 그럼 내가 user가 필요한데 한번 해볼게 ㄱㄷ
-//일단은 떳음 보이지?ㅇㅇ 왜이라노 아까는 몇번왔다갔다하니까 null뜨던데 뭐여 이거때문에 곤란했는디
-// 서버 재가동 되면 user 정보 날아감 로그인한다음에도.. 그거 왠진 모르지만 그럼
-//그럼 작업가능하겠다 근데 결국 채팅 들어감?ㅇㅇ 형이 뭐 만들어왓더라고 잘 될거같음
-//나 수욜부터 바로 학원간당? ㅇㅇ 얼른 합쳐서 이번주에 끝내자 
-//일단 이거도 데이터 불러오는거만 할꺼임 그리고 ui손보는걸로 얍 오늘 join이랑 login modal 일단 대충 다 잡아놨음
-//굿 나는 근데 담주에 부산에 면접갔다와야함ㅇㅇ 다녀와 근데 뭐 보여줄게 없자너 그니껭 완성해서 들고가야징
-// 나도 면접 보고싶은데 프로젝트가 안끝나서 맘 조급한 상태임.. 근데 이번주내로 되려나.... 모르겠네
-//나는 가능할듯  허접하게 들고가면 좀 그렇자너
-//ㄱㅊ 신입한테 뭘바람 일단은 최대한 해보자 너도 id 해서 잘 완성지어보고 됐다싶음 말해 그냥 내가 먼저 합쳐볼께 ㅇㅋㅋ
-//마지막으로 heart만 하고 일단 댓글heart는 빼고 진행함 댓글은 여유나면 그때 함  ㅇㅋ 뭐라도 완성해보자 아직 한개도 완성된거 없음 ㅎㅎ..
-//ㅋㅋ ㅇㅋㅇㅋ ㄳㄱ수고해라 ㄳㄳ
 public class PostController {
 	@Autowired
 	private PostDao dao;
@@ -67,16 +45,24 @@ public class PostController {
 	
 	@RequestMapping("postMain")
 	public String postMain(Model model) {
-		
-		ArrayList<PostDto> list = dao.list();
+		String user = Constant.username;
+		ArrayList<PostDto> list = dao.list(user);
 		model.addAttribute("list", list);
 		model.addAttribute("user",Constant.username);
 		System.out.println(Constant.username);
 		return "post/postMain";
 	}
 	
+	@RequestMapping("getPost")
+	public String getPost() {
+		
+		return"post/postMain";
+	}
+	
 	@RequestMapping("addPost")
-	public String addPost() {	
+	public String addPost(Model model) {	
+		model.addAttribute("user",Constant.username);
+		System.out.println(Constant.username);
 		return "post/addPost";
 	}
 	
@@ -86,6 +72,7 @@ public class PostController {
 		String images = "";
 		String titleImage="";
 		String tmp="";
+		int views =0;
 		List<MultipartFile> fileList = multi.getFiles("img");
 				
 		//������ �۾��ҽ�
@@ -110,7 +97,7 @@ public class PostController {
 		images = tmp;
 		String[] test = images.split("/");
 		titleImage = test[0];
-		PostDto dto = new PostDto(multi.getParameter("content"),multi.getParameter("hashtag"),multi.getParameter("location"),titleImage,images);
+		PostDto dto = new PostDto(multi.getParameter("email"),multi.getParameter("content"),multi.getParameter("hashtag"),multi.getParameter("location"),titleImage,images,views);
 		dao.write(dto);
 		return "redirect:postMain";
 	}
@@ -222,16 +209,18 @@ public class PostController {
 	}
 
 	@RequestMapping("addLike.do")
-	public String addLike(@RequestParam("postNo") String postNo) {
+	public String addLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
 		//이메일 추가예정
-		dao.addLike(postNo);
+		PostLikeDto dto = new PostLikeDto(postNo, email);
+		dao.addLike(dto);
 		return "redirect:postMain";
 	}
 
 	@RequestMapping("deleteLike.do")
-	public String deleteLike(@RequestParam("postNo") String postNo) {
+	public String deleteLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
 		//이메일 추가예정
-		dao.deleteLike(postNo);
+		PostLikeDto dto = new PostLikeDto(postNo, email);
+		dao.deleteLike(dto);
 		return "redirect:postMain";
 	}
 }

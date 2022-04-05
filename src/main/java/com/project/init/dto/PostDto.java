@@ -17,12 +17,25 @@ public class PostDto {
 	private int views;
 	private int comments;
 	private int likes;
+	private int heart;
 	private String authority;
 
 	public PostDto() {
 		super();
 	}
-
+	
+	//addPost 오버로딩
+	public PostDto(String email, String content,String hashtag, String location,String titleImage,String images,int views) {
+		super();
+		this.email = email;
+		this.hashtag = hashtag;
+		this.titleImage = titleImage;
+		this.images = images;
+		this.content = content;
+		this.location = location;
+		this.views = views;
+		
+	}
 
 	public PostDto(String postNo,String content,String hashtag,String location,String titleImage,String images) {
 		super();
@@ -35,17 +48,15 @@ public class PostDto {
 		
 	}
 	
-	public PostDto(String content,String hashtag, String location,String titleImage,String images) {
-		super();
-		this.hashtag = hashtag;
-		this.titleImage = titleImage;
-		this.images = images;
-		this.content = content;
-		this.location = location;
-		
+	
+	
+	public int getHeart() {
+		return heart;
 	}
 
-
+	public void setHeart(int heart) {
+		this.heart = heart;
+	}
 
 	public int getLikes() {
 		return likes;
