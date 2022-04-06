@@ -53,6 +53,10 @@ $(document).ready(function() {
 	$(".titleimg").click(function(){
         postNo = $(this).attr("data-value");
         
+		if(email!=="" && email!==null && email!=="null"){
+			addview();
+		}
+		
         $.ajax({
             url:"getlist.do",
             data:{postNo:postNo},
@@ -63,16 +67,17 @@ $(document).ready(function() {
  		        xhr.setRequestHeader(header, token);
  		    },
             success:function(data){
-	           	var Cslide = "";
+				console.log(data);
                 var Citem = "";
                 var userNickname="";
                 var postContent="";
 
             	let email = data[0].email;
-            	let title = data[0].title;
+            	let likes = data[0].likes;
             	let content = data[0].content;
+            	let comment_total = data[0].comments;
             	let location = data[0].location;
-            	let titleImage = data[0].titleImage;
+            	let views = data[0].views;
             	let images = data[0].images.split('/');
             	let postNo = data[0].postNo;
             	
@@ -86,12 +91,20 @@ $(document).ready(function() {
                	
             	userNickname ='<li>'+email+'</li>';
             	postContent ='<li>'+content+'</li>';
-            	
+            	likes ='<i class="modal-icon fa-regular fa-heart"></i>'+likes;
+            	views ='<i class="modal-icon fa-regular fa-eye"></i>'+views;
+            	comment_total ='<i class="modal-icon fa-regular fa-comment-dots"></i>'+comment_total;
+            	location ='<i class="modal-icon fa-regular fa-map"></i>'+location;
+				
+
 				//내용 넣는 프로세스
                 $(".Citem").html(Citem);
                 $(".userNickname").html(userNickname);
                 $(".postContent").html(postContent);
-                
+                $(".likes").html(likes);
+                $(".comment_total").html(comment_total);
+                $(".views").html(views);
+                $(".location").html(location);
                 $(".modify").attr('href','post/modify?postNo='+postNo);
                 $(".delete").attr('href','post/delete.do?postNo='+postNo);
             },
@@ -104,6 +117,25 @@ $(document).ready(function() {
         
     });
 
+	function addview(){
+		$.ajax({
+			url :'addView.do',
+			data : {
+				postNo : postNo,
+				email : email},
+			type : 'post',
+			beforeSend: function(xhr){
+		 	   	var token = $("meta[name='_csrf']").attr('content');
+		 		var header = $("meta[name='_csrf_header']").attr('content');
+	 		    xhr.setRequestHeader(header, token);
+	 		},
+			success : function () {
+			},
+			error : function () {
+				console.log('failed view up');
+			}
+		});
+	}
 	
 	$('.addcomment').click(function () {
 		
@@ -121,12 +153,13 @@ $(document).ready(function() {
 		 		var header = $("meta[name='_csrf_header']").attr('content');
 	 		    xhr.setRequestHeader(header, token);
 	 		},
-	 		success : function (data) {
+	 		success : function () {
 	 			console.log('success');
 	 			getComments();
+				
 	 			$('.comment').val("");
 			},
-			error : function (data) {
+			error : function () {
 				console.log('ERROR');
 			}
 			
@@ -195,11 +228,11 @@ $(document).ready(function() {
 							 		var header = $("meta[name='_csrf_header']").attr('content');
 						 		    xhr.setRequestHeader(header, token);
 						 		},
-						 		success : function (data) {
+						 		success : function () {
 						 			console.log('success');
 						 			getComments();
 								},
-								error : function (data) {
+								error : function () {
 									console.log('ERROR');
 								}
 								
@@ -234,9 +267,10 @@ $(document).ready(function() {
 						
 					});
 	         },
-	         error:function(data){
+	         error:function(){
 	             console.log("ajax 처리 실패");
 	         }
+
 	     });
 	}
 	

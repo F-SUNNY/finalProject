@@ -23,8 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    HASHTAG,
 	    REGDATE,
 	    LOCATION,
-	    VIEWS,
 	    AUTHORITY,
+	    (SELECT count(*) from POST_VIEW where POST_VIEW.postno = POST.postno) VIEWS,
 	 	(SELECT count(*) from COMMENTS where comments.postno = POST.postno)comments, 
 		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes,
 		(SELECT LIKES FROM POST_LIKE WHERE email = #{email,jdbcType=VARCHAR} AND POST_LIKE.postno=POST.postno) heart
@@ -35,7 +35,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
 	<!-- 게시글 하나 불러오기 -->
    <select id="getlist" parameterType="String" resultType="com.project.init.dto.PostDto">
-      SELECT * FROM POST where POSTNO= #{postNo} ORDER BY POSTNO 
+      SELECT 
+      POSTNO,
+      	EMAIL,
+      	TITLEIMAGE,
+	    IMAGES,
+	    CONTENT,
+	    HASHTAG,
+	    REGDATE,
+	    LOCATION,
+	    AUTHORITY,
+	    (SELECT count(*) from POST_VIEW where POST_VIEW.postno = POST.postno) VIEWS,
+	 	(SELECT count(*) from COMMENTS where comments.postno = POST.postno) comments, 
+		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes
+      FROM POST where POSTNO= #{postNo} ORDER BY POSTNO 
    </select>
    
    	<!-- 게시글 삭제 -->
@@ -136,4 +149,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   	 SELECT count(*) FROM post_like WHERE POSTNO=#{postNo} AND EMAIL =#{email}
    
    </select>
+   
+   <select id="view" resultType="_int" parameterType="com.project.init.dto.PostViewDto">
+  	
+  	 SELECT count(*) FROM POST_VIEW WHERE POSTNO=#{postNo} AND EMAIL =#{email}
+   
+   </select>
+   
+   <insert id="addView" parameterType="com.project.init.dto.PostViewDto">
+  	
+  	 INSERT INTO post_view(POSTVIEWNO,POSTNO,EMAIL,VIEWS) VALUES (POST_VIEW_SEQ.NEXTVAL,#{postNo},#{email},1)
+   
+   </insert>
 </mapper>

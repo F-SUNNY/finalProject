@@ -9,7 +9,6 @@ public class PostDto {
 	private String plan;
 	private String titleImage;
 	private String images;
-	private String title;
 	private String content;
 	private String hashtag;
 	private Timestamp regDate;
@@ -24,7 +23,7 @@ public class PostDto {
 		super();
 	}
 	
-	//addPost 오버로딩
+	//addPost �삤踰꾨줈�뵫
 	public PostDto(String email, String content,String hashtag, String location,String titleImage,String images,int views) {
 		super();
 		this.email = email;
@@ -117,14 +116,6 @@ public class PostDto {
 
 	public void setImages(String images) {
 		this.images = images;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public String getContent() {

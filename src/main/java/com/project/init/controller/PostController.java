@@ -22,6 +22,7 @@ import com.project.init.dao.PostDao;
 import com.project.init.dto.CommentsDto;
 import com.project.init.dto.PostDto;
 import com.project.init.dto.PostLikeDto;
+import com.project.init.dto.PostViewDto;
 import com.project.init.util.Constant;
 
 
@@ -72,7 +73,6 @@ public class PostController {
 	
 	@RequestMapping(value = "uploadMulti", method = { RequestMethod.POST })
 	public String uploadMulti(MultipartHttpServletRequest multi, Model model) {
-		System.out.println("ddddddd");
 		String images = "";
 		String titleImage="";
 		String tmp="";
@@ -80,9 +80,9 @@ public class PostController {
 		List<MultipartFile> fileList = multi.getFiles("img");
 				
 		//������ �۾��ҽ�
-		String path = "C:/Fsunny/project_init/src/main/webapp/resources/images/";
+		//String path = "C:/Fsunny/project_init/src/main/webapp/resources/images/";
 		//�п����� �۾��ҽ�
-		//String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
+		String path = "C:/Users/310-02/git/finalProject/src/main/webapp/resources/images/";
 		
 		for (MultipartFile mf : fileList) {
 			String originalFileName = mf.getOriginalFilename();
@@ -143,9 +143,9 @@ public class PostController {
 		List<MultipartFile> fileList = multi.getFiles("img");
 		
 		//������ �۾��ҽ�
-		String path = "C:/Fsunny/project_init/src/main/webapp/resources/images/";
+		//String path = "C:/Fsunny/project_init/src/main/webapp/resources/images/";
 		//�п����� �۾��ҽ�
-		//String path = "C:/Users/310-02/git/projectTest/whereRU/src/main/webapp/resources/images/";
+		String path = "C:/Users/310-02/git/finalProject/src/main/webapp/resources/images/";
 		
 		for (MultipartFile mf : fileList) {
 			String originalFileName = mf.getOriginalFilename();
@@ -219,12 +219,16 @@ public class PostController {
 		dao.addLike(dto);
 		return "redirect:postMain";
 	}
-
-	@RequestMapping("deleteLike.do")
-	public String deleteLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
+	
+	@ResponseBody
+	@RequestMapping("addView.do")
+	public String addView(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
+		System.out.println("����");
+		PostViewDto dto = new PostViewDto(postNo, email);
+		String result = dao.addView(dto);
+		return result;
 		
-		PostLikeDto dto = new PostLikeDto(postNo, email);
-		dao.deleteLike(dto);
-		return "redirect:postMain";
 	}
+
+	
 }

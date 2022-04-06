@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.project.init.dto.CommentsDto;
 import com.project.init.dto.PostDto;
 import com.project.init.dto.PostLikeDto;
+import com.project.init.dto.PostViewDto;
 
 
 public class PostDao implements PostIDao{
@@ -107,6 +108,7 @@ public class PostDao implements PostIDao{
 	@Override
 	public void addLike(PostLikeDto dto) {
 		int tmp =sqlSession.selectOne("like", dto);
+		
 		if(tmp ==0) {
 			sqlSession.insert("addLike", dto);			
 		}else {
@@ -115,8 +117,16 @@ public class PostDao implements PostIDao{
 	}
 
 	@Override
-	public void deleteLike(PostLikeDto dto) {
+	public String addView(PostViewDto dto) {
+		int tmp =sqlSession.selectOne("view", dto);
+		System.out.println("tmp = "+tmp);
 		
-		sqlSession.delete("deleteLike", dto);
+		if(tmp ==0) {
+			sqlSession.insert("addView", dto);	
+			return "success";
+		}else {
+			return "success";
+		}
 	}
+	
 }

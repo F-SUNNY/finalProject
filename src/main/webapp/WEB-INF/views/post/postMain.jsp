@@ -105,9 +105,18 @@ ul{
                         </ul>
 						</li>
                         <li class="list-group-item mb-1 d-flex row mx-0">
-                            <div class="col-6"><i class="modal-icon fa-regular fa-heart"></i></div>
-                            <div class="col-3"><i class="modal-icon fa-regular fa-bookmark"></i></div>
-                            <div class="col-3"><i class="modal-icon fa-regular fa-comment-dots"></i></div>
+                            <div class="col-2 likes">
+                           		<!-- 좋아요 갯수 들어감 -->
+                            </div>
+                            <div class="col-2 views">
+                           		
+                            </div>
+                            <div class="col-2 comment_total">
+                           		<!-- 댓글 갯수 들어감 -->
+                            </div>
+                            <div class="col-6 location">
+                           		<!-- 댓글 갯수 들어감 -->
+                            </div>
                         </li>
                         <li class="list-group-item "><i class="modal-icon fa-regular fa-comment-dots comments"></i>
 								

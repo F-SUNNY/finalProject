@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.project.init.dto.CommentsDto;
 import com.project.init.dto.PostDto;
 import com.project.init.dto.PostLikeDto;
+import com.project.init.dto.PostViewDto;
 
 
 public interface PostIDao {
@@ -14,7 +15,7 @@ public interface PostIDao {
 	public ArrayList<PostDto> getlist(String boardNum);
 	public void deleteBoard(String boardNum);
 	public void addLike(PostLikeDto dto);
-	public void deleteLike(PostLikeDto dto);
+	public String addView(PostViewDto dto);
 	public ArrayList<PostDto> modifyList(String boardNum);
 	public void modifyExcute(PostDto dto);
 	public void addcomments(CommentsDto dto);
