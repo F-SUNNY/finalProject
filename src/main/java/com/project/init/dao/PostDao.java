@@ -31,8 +31,8 @@ public class PostDao implements PostIDao{
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ArrayList<PostDto> getlist(String postNo) {
-		ArrayList<PostDto> dto = (ArrayList)sqlSession.selectList("getlist",postNo);
+	public ArrayList<PostDto> getlist(PostDto tmp) {
+		ArrayList<PostDto> dto = (ArrayList)sqlSession.selectList("getlist",tmp);
 		
 		return dto;
 	}
@@ -106,20 +106,24 @@ public class PostDao implements PostIDao{
 	}
 
 	@Override
-	public void addLike(PostLikeDto dto) {
+	public String addLike(PostLikeDto dto) {
 		int tmp =sqlSession.selectOne("like", dto);
+		String result ="";
 		
 		if(tmp ==0) {
-			sqlSession.insert("addLike", dto);			
+			sqlSession.insert("addLike", dto);	
+			result = "add";
+			
 		}else {
 			sqlSession.delete("deleteLike", dto);
+			result = "delete";
 		}
+		return result;
 	}
 
 	@Override
 	public String addView(PostViewDto dto) {
-		int tmp =sqlSession.selectOne("view", dto);
-		System.out.println("tmp = "+tmp);
+		int tmp =sqlSession.selectOne("view", dto);	
 		
 		if(tmp ==0) {
 			sqlSession.insert("addView", dto);	

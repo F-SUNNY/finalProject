@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
    
 	<!-- 게시글 하나 불러오기 -->
-   <select id="getlist" parameterType="String" resultType="com.project.init.dto.PostDto">
+   <select id="getlist" parameterType="com.project.init.dto.PostDto" resultType="com.project.init.dto.PostDto">
       SELECT 
       POSTNO,
       	EMAIL,
@@ -45,9 +45,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    REGDATE,
 	    LOCATION,
 	    AUTHORITY,
-	    (SELECT count(*) from POST_VIEW where POST_VIEW.postno = POST.postno) VIEWS,
-	 	(SELECT count(*) from COMMENTS where comments.postno = POST.postno) comments, 
-		(SELECT count(*) from POST_LIKE where POST_LIKE.postno = POST.postno) likes
+	    (SELECT COUNT(*) FROM POST_LIKE WHERE email = #{email} AND POSTNO = #{postNo}) heartCheck,
+	    (SELECT COUNT(*) FROM POST_VIEW WHERE POST_VIEW.postno = POST.postno) VIEWS,
+	 	(SELECT COUNT(*) FROM COMMENTS WHERE comments.postno = POST.postno) comments, 
+		(SELECT COUNT(*) FROM POST_LIKE WHERE POST_LIKE.postno = POST.postno) likes
       FROM POST where POSTNO= #{postNo} ORDER BY POSTNO 
    </select>
    
@@ -74,8 +75,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 댓글 달기 -->
    <insert id="addcomments" parameterType="com.project.init.dto.CommentsDto">
       <![CDATA[
-      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps)
-       VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},COMMENTS_SEQ.CURRVAL,#{grpl},0)
+      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps,EMAIL)
+       VALUES (COMMENTS_SEQ.nextval,#{postNo},#{content},COMMENTS_SEQ.CURRVAL,#{grpl},0,#{email})
        ]]>
    </insert>
    
@@ -113,14 +114,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <!-- 대 댓글 작성 -->
    <insert id="addReplyComments" parameterType="com.project.init.dto.CommentsDto">
       <![CDATA[
-      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps) 
+      INSERT INTO COMMENTS (COMMENTNO,POSTNO,CONTENT,grp,grpl,grps,EMAIL) 
        VALUES
          (COMMENTS_SEQ.nextval,
          #{postNo},
          #{content},
          #{grp},
          (#{grpl}+1),
-         (#{grps}+1))
+         (#{grps}+1),
+         #{email})
        ]]>
    </insert>
    

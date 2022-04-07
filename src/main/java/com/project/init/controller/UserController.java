@@ -83,11 +83,15 @@ public class UserController {
 	
 
 	@RequestMapping(value="/processLogin")
-	public String processLogin(@RequestParam(value="error") String error,Model model) {
+	public String processLogin(@RequestParam(value="error",required = false) String error,@RequestParam(value="logout", required =false) String logout,Model model) {
 		System.out.println("processLogin");
 		if(error != null && error !="") { //로그인시 에러발생하면 security에서 요청(값은 1)
 			model.addAttribute("error",  "아이디와 비밀번호를 다시 확인해주세요.");
 			System.out.println(error);
+		}
+		if(logout !=null && logout !="") {
+			System.out.println("logged out");
+			Constant.username = "";
 		}
 		return "/index";
 	}

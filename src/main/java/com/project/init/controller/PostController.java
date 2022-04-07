@@ -109,10 +109,10 @@ public class PostController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="getlist.do")
-	public ArrayList<PostDto> getlist(@RequestParam("postNo") String postNo) {
-		
-		ArrayList<PostDto> dto = dao.getlist(postNo);
+	@RequestMapping("getlist.do")
+	public ArrayList<PostDto> getlist(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
+		PostDto tmp = new PostDto(postNo,email);
+		ArrayList<PostDto> dto = dao.getlist(tmp);
 		
 		return dto;
 	}
@@ -169,20 +169,20 @@ public class PostController {
 	
 	@ResponseBody
 	@RequestMapping("addcomments.do")
-	public void addcomments(@RequestParam("postNo") String postNo, @RequestParam("content") String content,@RequestParam("grpl") String grpl){
+	public void addcomments(@RequestParam("postNo") String postNo, @RequestParam("content") String content,@RequestParam("grpl") String grpl,@RequestParam("email") String email){
 		int Igrpl = Integer.parseInt(grpl);
-		CommentsDto dto = new CommentsDto(postNo,content,Igrpl);
+		CommentsDto dto = new CommentsDto(postNo,content,Igrpl,email);
 		dao.addcomments(dto);
 		
 	}
 	
 	@ResponseBody
 	@RequestMapping("addReplyComments.do")
-	public void addReplyComments(@RequestParam("postNo") String postNo,@RequestParam("grp") String grp, @RequestParam("content") String content,@RequestParam("grpl") String grpl,@RequestParam("grps") String grps){
+	public void addReplyComments(@RequestParam("postNo") String postNo,@RequestParam("grp") String grp, @RequestParam("content") String content,@RequestParam("grpl") String grpl,@RequestParam("grps") String grps,@RequestParam("email") String email){
 		int Igrp = Integer.parseInt(grp);
 		int Igrpl = Integer.parseInt(grpl);
 		int Igrps = Integer.parseInt(grps);
-		CommentsDto dto = new CommentsDto(postNo,Igrp,content,Igrpl,Igrps);
+		CommentsDto dto = new CommentsDto(postNo,Igrp,content,Igrpl,Igrps,email);
 		dao.addReplyComments(dto);
 		
 	}
@@ -212,18 +212,18 @@ public class PostController {
 		return "postMain";
 	}
 
-	@RequestMapping("addLike.do")
+	@ResponseBody
+	@RequestMapping(value="addLike.do",produces = "application/text; charset=UTF-8")
 	public String addLike(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
 		
 		PostLikeDto dto = new PostLikeDto(postNo, email);
-		dao.addLike(dto);
-		return "redirect:postMain";
+		String result = dao.addLike(dto);
+		return result;
 	}
 	
 	@ResponseBody
 	@RequestMapping("addView.do")
 	public String addView(@RequestParam("postNo") String postNo,@RequestParam("email") String email) {
-		System.out.println("¡¯¿‘");
 		PostViewDto dto = new PostViewDto(postNo, email);
 		String result = dao.addView(dto);
 		return result;

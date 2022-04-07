@@ -12,9 +12,9 @@ public interface PostIDao {
 
 	public PostDto write(PostDto dto);
 	public ArrayList<PostDto> list(String email);
-	public ArrayList<PostDto> getlist(String boardNum);
+	public ArrayList<PostDto> getlist(PostDto tmp);
 	public void deleteBoard(String boardNum);
-	public void addLike(PostLikeDto dto);
+	public String addLike(PostLikeDto dto);
 	public String addView(PostViewDto dto);
 	public ArrayList<PostDto> modifyList(String boardNum);
 	public void modifyExcute(PostDto dto);

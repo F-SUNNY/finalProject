@@ -17,6 +17,7 @@ public class PostDto {
 	private int comments;
 	private int likes;
 	private int heart;
+	private int heartCheck;
 	private String authority;
 
 	public PostDto() {
@@ -49,6 +50,20 @@ public class PostDto {
 	
 	
 	
+	public PostDto(String postNo, String email) {
+		super();
+		this.postNo = postNo;
+		this.email = email;
+	}
+
+	public int getHeartCheck() {
+		return heartCheck;
+	}
+
+	public void setHeartCheck(int heartCheck) {
+		this.heartCheck = heartCheck;
+	}
+
 	public int getHeart() {
 		return heart;
 	}

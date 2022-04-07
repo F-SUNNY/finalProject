@@ -29,116 +29,201 @@
 ul{
    list-style:none;
    }
+.like.active {
+	color: red;
+}
+.modal-like.active {
+	color: red;
+}
+.profile-img-xs {
+	display: flex;
+	align-items: center;
+	padding-top: 0.5px;
+}
+.post-nickname, bottom-likes, bottom-comments, bottom-views {
+	height: 50%;
+}
+.img-xs {
+	width: 100%;
+	height: 90%;
+	border-radius: 50%;
+}
+.userinfo, .status {
+	height: 50%;
+}
+ul {
+	list-style: none;	
+}
+.profile-img-s {
+	height: 100%;
+}
+.img-s {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+.list-group-item:nth-child(3) {
+	align-items: center;
+}
+input.comment,
+input.recomment {
+	width: 85%;
+	border: none;
+	border-bottom: 1px solid #dee2e6;
+}
+profile-img-xxs {
+	height: 100%;
+}
+.img-xxs {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+}
+.comments {
+	height: 90%;
+	overflow : auto;
+}
+.comments .coment-block {
+	align-items: center;
+}
+span.comment-text {
+	overflow-wrap: break-word;
+}
+.coment-block .form-group {
+	display: none;
+}
 </style>
 </head>
 <body>
 <%@ include file="../includes/header.jsp" %>
 <input type="hidden" value = "${user}" id="user">
-<div id ="main-body">
-<section  class="container mb-4">
-	
+<section class="container mb-4">
+	<input type="hidden" id="modalBtn" data-toggle="modal" data-target="#myModal" value="modal" />
+
 	<div class="result_posts">
 		<div class="posts d-flex flex-wrap justify-content-start mt-2">
-		<a href="addPost">추가 ㄱ</a>
 			<c:forEach items="${list}" var="post" >
 				<div class="post mr-2">
 					<div class="post-top border rounded">
 						<img class="titleimg" style="cursor : pointer;" width="280px" src="../images/${post.titleImage}" data-value="${post.postNo}" data-toggle="modal" data-target="#modal-reg">
 					</div>
-					<div class="post-bottom border text-center" style="overflow: hidden;">
+					<div class="post-bottom border row mx-0">
+						<div class="profile-img-xs col-3 px-0">
+							<div class="img-xs border"></div>
+						</div>
 						
-						<c:choose>
-							<c:when test ="${empty user}">
-								<i class="fa-solid fa-heart" style="color:red;"></i>${post.likes}
-							</c:when>
-							
-							<c:otherwise>
+						<div class="info col-9 row mx-0 flex-wrap">
+							<div class="post-nickname col-12 px-0 pt-2">
+							${post.email}
+							</div>
+						
+							<div class="bottom-likes col-4 px-0">
 								<c:choose>
-									<c:when test="${0 == post.heart}">
-										<i class="fa-solid fa-heart like" data-postno="${post.postNo}" style="color:black; cursor : pointer;"></i>${post.likes}
+									<c:when test ="${empty user}">
+										<i class="fa-solid fa-heart" data-postno="${post.postNo}"></i>
+									</c:when>
+		
+									<c:when test="${post.heart == 0}">
+										<i class="fa-solid fa-heart like" data-postno="${post.postNo}"></i>						
 									</c:when>
 									
 									<c:otherwise>
-										<i class="fa-solid fa-heart like" data-postno="${post.postNo}" style="color:red; cursor : pointer;"></i>${post.likes}	
+										<i class="fa-solid fa-heart like active" data-postno="${post.postNo}"></i>
 									</c:otherwise>
-								</c:choose>			
-							</c:otherwise>	
-						</c:choose>					  
-						<i class="fa-solid fa-comment-dots"></i>&nbsp;${post.comments}
-						<i class="fa-solid fa-eye"></i>&nbsp;${post.views}
+								</c:choose>
+									<span id="likeCount">${post.likes}</span>
+							</div>
+								
+							<div class="bottom-comments col-4 px-0">		  
+								<i class="fa-solid fa-comment-dots"></i>
+								<span id="commentCount">${post.comments}</span>
+							</div>
+							<div class="bottom-views col-4 px-0">
+								<i class="fa-solid fa-eye"></i>
+								<span id="viewCount">${post.views}</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</c:forEach>
-			
 		</div>
 	</div>
 </section>
-</div>
 <!--  modal And Caouosel -->
-<div class="modal fade" id="modal-reg">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-body bg-light d-flex justify-content-between">
-                    <div class="post-img border rounded mr-2"><i class="modal-icon fa-regular fa-images" /></i>
-                        <div id="demo" class="carousel slide" data-ride="carousel">
-                            <!-- The slideshow -->
-                            <div class="carousel-inner Citem">
-                            </div>
-                            <!-- Left and right controls -->
-                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                <span class="carousel-control-prev-icon"></span>
-                            </a>
-                            <a class="carousel-control-next" href="#demo" data-slide="next">
-                                <span class="carousel-control-next-icon"></span>
-                            </a>
+<!-- modal 창 -->
+<div class="modal fade" id="modal-reg" role="dialog">
+	<div class="modal-dialog modal-dialog-centered modal-xl d-block">
+		<button type="button" id="modalCloseBtn" class="btn btn-lg btn-default text-white text-weight-bold display-1 float-right" data-dismiss="modal">&times;</button>
+		<div class="modal-content">
+			<div class="modal-body bg-light d-flex justify-content-between">
+				<div class="post-img border rounded mr-2">
+					<div id="demo" class="carousel slide" data-ride="carousel">
+                    	<!-- The slideshow -->
+                        <div class="carousel-inner Citem">
+                        	<!-- 이미지 등록 -->
                         </div>
+                        <!-- Left and right controls -->
+                        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#demo" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
                     </div>
-                    <ul class="list-group d-block">
-                        <li class="list-group-item mb-1"><i class="modal-icon fa-regular fa-circle-user"></i>
-                        <ul class="userNickname">
-                        	
-                        </ul>
-                        </li>
-                        <li class="list-group-item mb-1"><i class="modal-icon fa-regular fa-rectangle-list"></i>
-						<ul class="postContent">
-                        	
-                        </ul>
-						</li>
-                        <li class="list-group-item mb-1 d-flex row mx-0">
-                            <div class="col-2 likes">
-                           		<!-- 좋아요 갯수 들어감 -->
-                            </div>
-                            <div class="col-2 views">
-                           		
-                            </div>
-                            <div class="col-2 comment_total">
-                           		<!-- 댓글 갯수 들어감 -->
-                            </div>
-                            <div class="col-6 location">
-                           		<!-- 댓글 갯수 들어감 -->
-                            </div>
-                        </li>
-                        <li class="list-group-item "><i class="modal-icon fa-regular fa-comment-dots comments"></i>
-								
-                        </li>
-                        <li>
-                        <div class="row">
-                        <input type="text" class="col-sm-10 comment grpl" data-value="0">
-                        <button type="button" class="btn btn-outline-success addcomment" role="button">전송</button>
-                        </div>
-                        </li>
-                        
-                    </ul>
-                </div>
-            <!-- Modal footer -->
-            <c:if test="${user == post.email}">
-        	<div class="modal-footer">
-        		<a class="btn btn-outline-success modify" href="#" role="button">Modify</a>
-                <a class="btn btn-outline-danger delete" href="#" role="button" onclick="deleteCheck()">Delete</a>
-        	</div>
-        	</c:if>
-        </div>
-    </div>
+				</div>
+				<ul class="list-group d-block">
+					<li class="list-group-item d-flex row mx-0 mb-1">
+						<div class="profile-img-s col-2 px-0">
+							<div class="img-s border"></div>
+						</div>
+						
+						<div class="col-10">
+							<div class="email">
+								<!-- 닉네임 -->
+							</div>
+							
+							<div class="location ">
+								<!-- 장소 -->
+							</div>
+						</div>
+					</li>
+					
+					
+					<li class="list-group-item mb-1 content">
+					<!-- 컨텐츠 내용 -->
+					</li>
+					
+					<li class="list-group-item mb-1 d-flex row mx-0">
+						
+						<div class="col-4 likes">
+						<!-- 좋아요 -->
+						</div>
+						
+						<div class="col-4 views">
+						<!-- 조회수 -->
+						</div>
+						
+						<div class="col-4 comment_total">
+						<!-- 댓글갯수 -->
+						</div>
+					</li>
+					
+					
+					<li class="list-group-item">
+                       	<input type="text" class="comment grpl" placeholder="comment" data-value="0">
+                       	<button type="button" class="btn btn-sm btn-outline-success addcomment ml-1" role="button">전송</button>
+					
+						<div class="comments">
+						</div>
+					</li>
+
+					<li>
+
+                    </li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </div>
 
 

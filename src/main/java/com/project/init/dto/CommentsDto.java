@@ -31,18 +31,28 @@ public class CommentsDto {
 	}
 	
 	
+	public CommentsDto(String postNo, String content, int grpl, String email) {
+		super();
+		this.postNo = postNo;
+		this.email = email;
+		this.content = content;
+		this.grpl = grpl;
+	}
+
+
 	public CommentsDto() {
 		super();
 	}
 
 
-	public CommentsDto(String postNo, int grp, String content, int grpl, int grps) {
+	public CommentsDto(String postNo, int grp, String content, int grpl, int grps, String email) {
 		super();
 		this.postNo = postNo;
 		this.content = content;
 		this.grp = grp;
 		this.grpl = grpl;
 		this.grps = grps;
+		this.email = email;
 	}
 
 	public CommentsDto(String postNo, String content,int grpl) {

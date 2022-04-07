@@ -5,61 +5,22 @@ $(document).ready(function() {
 	let postNo = "";
 	let email = $('#user').attr('value');
 	
-	$(".like").on('click',function () {
-		postNo = $(this).attr('data-postno');
-		
-		$.ajax({
-			url :'addLike.do',
-			data : {
-				postNo : postNo,
-				email : email},
-			type : 'post',
-			beforeSend: function(xhr){
-		 	   	var token = $("meta[name='_csrf']").attr('content');
-		 		var header = $("meta[name='_csrf_header']").attr('content');
-	 		    xhr.setRequestHeader(header, token);
-	 		},
-			success : function () {
-				getPost();
-				console.log('하트날리기 성공');	
-			},
-			error : function () {
-				console.log('하트날리기 실패');
-			}
-		});
-	});
-	
-	function getPost(){
-		$.ajax({
-			url :'getPost.do',
-			type : 'get',
-			beforeSend: function(xhr){
-		 	   	var token = $("meta[name='_csrf']").attr('content');
-		 		var header = $("meta[name='_csrf_header']").attr('content');
-	 		    xhr.setRequestHeader(header, token);
-	 		},
-			success : function (data) {
-				$('#main-body').html(data);
-				console.log('JSP뿌리기 성공');	
-			},
-			error : function () {
-				console.log('JSP뿌리기 실패');
-			}
-		});
-	}
-	
 	
 	
 	$(".titleimg").click(function(){
         postNo = $(this).attr("data-value");
-        
+		email = $('#user').attr('value');
+		
+		
 		if(email!=="" && email!==null && email!=="null"){
 			addview();
 		}
 		
-        $.ajax({
+		$.ajax({
             url:"getlist.do",
-            data:{postNo:postNo},
+            data:{
+				postNo:postNo,
+				email : email},
             type:"post",
  		    beforeSend: function(xhr){
 	 		   	var token = $("meta[name='_csrf']").attr('content');
@@ -80,7 +41,7 @@ $(document).ready(function() {
             	let views = data[0].views;
             	let images = data[0].images.split('/');
             	let postNo = data[0].postNo;
-            	
+            	let heartCheck =data[0].heartCheck;
             	for(var i=0; i<images.length-1; i++){
                     if(i==0){
                        Citem+='<div class="carousel-item active"><img src="../images/'+images[i]+'"></div>';
@@ -88,19 +49,25 @@ $(document).ready(function() {
                        Citem+='<div class="carousel-item"><img src="../images/'+images[i]+'"></div>';
                     }
                 }
-               	
-            	userNickname ='<li>'+email+'</li>';
-            	postContent ='<li>'+content+'</li>';
-            	likes ='<i class="modal-icon fa-regular fa-heart"></i>'+likes;
-            	views ='<i class="modal-icon fa-regular fa-eye"></i>'+views;
+              
+            	
+				if(heartCheck==0){
+					likes ='<i class="modal-icon fa-regular fa-heart modal-like" data-postno="'+postNo+'"></i>'+
+            			'<span id="likeCount">'+likes+'</span>';
+            	}else{
+					likes ='<i class="modal-icon fa-regular fa-heart modal-like active" data-postno="'+postNo+'"></i>'+
+            			'<span id="likeCount">'+likes+'</span>';
+				}
+
+				views ='<i class="modal-icon fa-regular fa-eye"></i>'+views;
             	comment_total ='<i class="modal-icon fa-regular fa-comment-dots"></i>'+comment_total;
-            	location ='<i class="modal-icon fa-regular fa-map"></i>'+location;
+
 				
 
 				//내용 넣는 프로세스
                 $(".Citem").html(Citem);
-                $(".userNickname").html(userNickname);
-                $(".postContent").html(postContent);
+                $(".email").html(email);
+                $(".content").html(content);
                 $(".likes").html(likes);
                 $(".comment_total").html(comment_total);
                 $(".views").html(views);
@@ -112,10 +79,9 @@ $(document).ready(function() {
                 console.log("ajax1 처리 실패");
             }
         });
-        
-        getComments();
-        
+   		getComments();
     });
+		modalLike();
 
 	function addview(){
 		$.ajax({
@@ -138,7 +104,7 @@ $(document).ready(function() {
 	}
 	
 	$('.addcomment').click(function () {
-		
+
 		let content = $('.comment').val();
 		let grpl = $('.grpl').attr('data-value');
 		
@@ -147,7 +113,8 @@ $(document).ready(function() {
 			type : 'post',
 			data : {postNo : postNo,
 					content : content,
-					grpl : grpl},
+					grpl : grpl,
+					email : email},
 			beforeSend: function(xhr){
 		 	  	var token = $("meta[name='_csrf']").attr('content');
 		 		var header = $("meta[name='_csrf_header']").attr('content');
@@ -167,35 +134,70 @@ $(document).ready(function() {
 	});
 
 	
+	function modalLike(){
+			$(document).on('click','.modal-like' ,function(){
+			var element = $(this);
+     	 	postNo = $(this).attr('data-postno');
+			
+			$.ajax({
+	        	url :'addLike.do',
+	         	data : {
+	            	postNo : postNo,
+	                email : email
+	            },
+	         	type : 'post',
+	         	beforeSend: function(xhr){
+	            	var token = $("meta[name='_csrf']").attr('content');
+	            	var header = $("meta[name='_csrf_header']").attr('content');
+	            	xhr.setRequestHeader(header, token);
+	         	},
+	        	success : function(info) {
+	            	if ( info == 'add' ) {
+	               		element.addClass('active');
+	               		element.siblings('#likeCount').text(Number(element.siblings('#likeCount').text())+1);
+	            	} else {
+	               		element.removeClass('active');
+	               		element.siblings('#likeCount').text(Number(element.siblings('#likeCount').text())-1);
+	       		    }
 	
+
+	            	console.log('하트날리기 성공');   
+	        	},
+	         	error : function () {
+	            	console.log('하트날리기 실패');
+	        	}
+    		});
+		});
+	}
+		
 	function getComments() {
 		let comments ="";
 		$.ajax({
-	         url:"getcomments.do",
-	         data:{postNo:postNo},
-	         type:"post",
-			    beforeSend: function(xhr){
-		 		   	var token = $("meta[name='_csrf']").attr('content');
-		 			var header = $("meta[name='_csrf_header']").attr('content');
-			        xhr.setRequestHeader(header, token);
+	        url:"getcomments.do",
+	        data:{postNo:postNo},
+	        type:"post",
+			beforeSend: function(xhr){
+		 	  	var token = $("meta[name='_csrf']").attr('content');
+		 		var header = $("meta[name='_csrf_header']").attr('content');
+			    xhr.setRequestHeader(header, token);
 			    },
-	         success:function(data){
-	        	 console.log(data);
+	        success:function(data){
 		           	for(var i=0; i<data.length; i++){
-		           		comments += '<div>';
-						
-		           		for(var y=0; y<data[i].grpl; y++){
-		           		comments += '&nbsp;&nbsp;';
+						comments += '<div class="coment-block row mx-0 my-1 d-flex">';
+		           		for(var y=0; y < data[i].grpl; y++){
+		           			comments += '<span>&nbsp;</span>';
 						}
-		           		
-		           		comments += '<span style="font-size:15px;">'+data[i].content+'</span>&nbsp;&nbsp;&nbsp;';
-						comments += '<span class ="replyClick" style="font-size:5px; cursor : pointer;">답글달기</span>&nbsp;';
-						comments += '<i class="fa-solid fa-heart" style="font-size:5px; color:red; cursor : pointer;"></i>&nbsp;';
-						comments += '<span class ="addHeart" style="font-size:5px;">'+data[i].likes+'</span>&nbsp;';
-						comments += '<i class="fa-solid fa-x deleteRe" style="font-size:5px; color:red; cursor : pointer;" data-no="'+data[i].commentNo+'" ></i><br/>';
-						comments += '<div class="row">';
-						comments += '<input type="hidden" class="col-xs-10 replyComment" data-grp="'+data[i].grp+'" data-grpl="'+data[i].grpl+'" " data-grps="'+data[i].grps+'">';
-						comments += '<input type="hidden" class="btn btn-outline-success addreplyComment" role="button" value="전송"></input>';
+						comments +=	'<div class="profile-img-xxs col-1 px-0">';
+						comments +=	'<div class="img-xxs border"></div>';
+						comments +=	'</div>';
+						comments +=	'<span class="col-3 pl-1" style="font-size: 14px; font-weight: 600;">' + data[i].email + '</span>';
+		           		comments += '<span class="col-6 px-0 comment-text" style="font-size: 13px;">'+data[i].content+'</span>';
+						comments += '<span class="replyClick col-1 px-0" data-count="0" style="font-size: 5px; cursor : pointer;">답글</span>';
+						comments += '<i class="fa-solid fa-x deleteRe" style="font-size:5px; color:red; cursor : pointer;" data-no="'+data[i].commentNo+'"></i><br/>';
+						comments += '<div class="form-group col-12 row mx-0">';
+						comments += '<input type="text" class="col-10 recomment" data-grp="'+data[i].grp+'" data-grpl="'+data[i].grpl+'" data-grps="'+data[i].grps+'">';
+						comments += '<input type="button" class="btn btn-sm btn-outline-success addreplyComment ml-1" role="button" value="전송">';
+						comments += '</div>';
 						comments += '</div>';
 						comments += '</div>';
 		           	}
@@ -204,16 +206,23 @@ $(document).ready(function() {
 					
 					$('.replyClick').click(function () { //re댓글 작성
 						
-						$(this).siblings('.row').children('.replyComment').attr('type','text');
-						$(this).siblings('.row').children('.addreplyComment').attr('type','button');
+						var count = $(this).attr('data-count');
+						
+						if ( count == 0 ) {
+							$(this).siblings('.form-group').css('display', 'flex');
+							$(this).attr('data-count', Number(count)+1);
+						} else {
+							$(this).siblings('.form-group').css('display', 'none');
+							$(this).attr('data-count', 0);
+						}
 						
 						
 						$('.addreplyComment').click(function () {
-							let content = $(this).siblings('.replyComment').val();
-							let grp = $(this).siblings('.replyComment').attr('data-grp');
-							let grpl = $(this).siblings('.replyComment').attr('data-grpl');
-							let grps = $(this).siblings('.replyComment').attr('data-grps');
-					
+							let content = $(this).siblings('.recomment').val();
+							let grp = $(this).siblings('.recomment').attr('data-grp');
+							let grpl = $(this).siblings('.recomment').attr('data-grpl');
+							let grps = $(this).siblings('.recomment').attr('data-grps');
+							console.log(email);
 
 							$.ajax({
 								url : 'addReplyComments.do',
@@ -222,7 +231,8 @@ $(document).ready(function() {
 										content : content,
 										grp : grp,
 										grpl : grpl,
-										grps : grps},
+										grps : grps,
+										email : email},
 								beforeSend: function(xhr){
 							 	  	var token = $("meta[name='_csrf']").attr('content');
 							 		var header = $("meta[name='_csrf_header']").attr('content');
